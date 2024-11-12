@@ -1,132 +1,136 @@
-datasource db {
-  provider = "sqlite"
-  url      = "file:dev.db"
+// schema.prisma
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
-generator client {
-  provider = "prisma-client-js"
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id         String   @id @default(cuid())
-  created_at DateTime @default(now())
-  email      String   @unique
-  password   String
-  board      Board[]
+  id           String           @id @default(cuid()) @db.Uuid
+  email        String           @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  budgets      Budget[]
+  expenses     Expense[]
+  incomes      Income[]
+  savingsGoals SavingsGoal[]
+  security     Security?
+  transactions Transaction[]
+  preferences  UserPreferences?
 }
 
 model Session {
-  id        String   @id @default(cuid())
+  id        String   @id
   sid       String   @unique
   data      String
-  expiresAt DateTime
+  expiresAt   DateTime
 }
 
-model Board {
-  id               String             @id @default(cuid())
-  created_at       DateTime           @default(now())
-  name             String
-  sensorData       String
-  sensorShareToken String
-  user_id          String?
-  pendingActions   TriggeredActions[]
-  user             User?              @relation(fields: [user_id], references: [id])
-  routines         Routine[]
+model UserPreferences {
+  id       String  @id @default(cuid()) @db.Uuid
+  currency String
+  language String
+  timezone String
+  theme    String
+  userId   String? @unique @db.Uuid
+  user     User?   @relation(fields: [userId], references: [id])
 }
 
-// This is used to send the actions to the board, it doesn't include any logic
-model TriggeredActions {
-  id          Int    @id @default(autoincrement())
-  actionType  String
-  actionValue Float
-
-  boardId String
-  board   Board  @relation(fields: [boardId], references: [id])
+model Expense {
+  id          String   @id @default(cuid()) @db.Uuid
+  amount      Float
+  category    String
+  description String?
+  date        DateTime
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
 }
 
-// Refer to typescript types for an object-view of the schema
-model Routine {
-  id                 Int                 @id @default(autoincrement())
-  name               String
-  execution          String
-  active             Boolean         @default(true)
-  automatedExecution AutomatedExecution?
-  actions            Actions?
-
-  board   Board?  @relation(fields: [boardId], references: [id])
-  boardId String?
+model Income {
+  id          String   @id @default(cuid()) @db.Uuid
+  amount      Float
+  source      String
+  date        DateTime
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
 }
 
-model AutomatedExecution {
-  id                    Int      @id @default(autoincrement())
-  checkInterval         Int
-  nextExecutionInterval DateTime
-
-  routineId Int?     @unique
-  routine   Routine? @relation(fields: [routineId], references: [id])
-
-  conditionsId Int?        @unique
-  conditions   Conditions? @relation(fields: [conditionsId], references: [id])
+model Budget {
+  id        String       @id @default(cuid()) @db.Uuid
+  category  String
+  amount    Float
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  status    BudgetStatus
+  userId    String       @db.Uuid
+  user      User         @relation(fields: [userId], references: [id])
 }
 
-model Conditions {
-  id Int @id @default(autoincrement())
-
-  temperatureExceedsId Int       @unique
-  temperatureExceeds   Condition @relation("TemperatureExceeds", fields: [temperatureExceedsId], references: [id])
-
-  temperatureBelowId Int       @unique
-  temperatureBelow   Condition @relation("TemperatureBelow", fields: [temperatureBelowId], references: [id])
-
-  humidityExceedsId Int       @unique
-  humidityExceeds   Condition @relation("HumidityExceeds", fields: [humidityExceedsId], references: [id])
-
-  humidityBelowId Int       @unique
-  humidityBelow   Condition @relation("HumidityBelow", fields: [humidityBelowId], references: [id])
-
-  AutomatedExecution AutomatedExecution[]
+model Transaction {
+  id          String          @id @default(cuid()) @db.Uuid
+  amount      Float
+  type        TransactionType
+  category    String
+  description String?
+  date        DateTime
+  tags        String[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  userId      String          @db.Uuid
+  user        User            @relation(fields: [userId], references: [id])
 }
 
-model Condition {
-  id                 Int         @id @default(autoincrement())
-  active             Boolean
-  value              Float
-  temperatureExceeds Conditions? @relation("TemperatureExceeds")
-  temperatureBelow   Conditions? @relation("TemperatureBelow")
-  humidityExceeds    Conditions? @relation("HumidityExceeds")
-  humidityBelow      Conditions? @relation("HumidityBelow")
+model SavingsGoal {
+  id            String            @id @default(cuid()) @db.Uuid
+  targetAmount  Float
+  currentAmount Float
+  description   String
+  deadline      DateTime
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  status        SavingsGoalStatus
+  userId        String            @db.Uuid
+  user          User              @relation(fields: [userId], references: [id])
 }
 
-model Actions {
-  id            Int               @id @default(autoincrement())
-  waterId       Int               @unique
-  rotatePanelId Int               @unique
-  notifyId      Int               @unique
-  water         WaterAction       @relation(fields: [waterId], references: [id])
-  rotatePanel   RotatePanelAction @relation(fields: [rotatePanelId], references: [id])
-  notify        NotifyAction      @relation(fields: [notifyId], references: [id])
-
-  routineId Int     @unique
-  routine   Routine @relation(fields: [routineId], references: [id])
+model Security {
+  id                   String    @id @default(cuid()) @db.Uuid
+  resetToken           String?
+  resetTokenExpiration DateTime?
+  twoFactorEnabled     Boolean   @default(false)
+  twoFactorSecret      String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  userId               String    @unique @db.Uuid
+  user                 User      @relation(fields: [userId], references: [id])
 }
 
-model WaterAction {
-  id      Int      @id @default(autoincrement())
-  active  Boolean
-  amount  Float
-  Actions Actions?
+enum BudgetStatus {
+  active
+  inactive
 }
 
-model RotatePanelAction {
-  id      Int      @id @default(autoincrement())
-  active  Boolean
-  Actions Actions?
+enum TransactionType {
+  expense
+  income
 }
 
-model NotifyAction {
-  id      Int      @id @default(autoincrement())
-  active  Boolean
-  Actions Actions?
+enum SavingsGoalStatus {
+  active
+  completed
+  expired
 }
-
-// Remove the enum Execution declaration
