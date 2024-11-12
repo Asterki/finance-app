@@ -52,67 +52,71 @@ class ProfileService {
 		}
 	}
 
-    public async activateTwoFactorAuth(userID: string, secret: string, code: string) {
-        try {
-            // Verify the token
-            const verified = speakeasy.totp.verify({
-                secret,
-                encoding: 'base32',
-                token: code,
-            })
+	public async activateTwoFactorAuth(
+		userID: string,
+		secret: string,
+		code: string
+	): Promise<{ status: 'invalid-code' | 'success' | 'internal-error' }> {
+		try {
+			// Verify the token
+			const verified = speakeasy.totp.verify({
+				secret,
+				encoding: 'base32',
+				token: code,
+			})
 
-            if (!verified) {
-                return { status: 'invalid-code' }
-            }
+			if (!verified) {
+				return { status: 'invalid-code' }
+			}
 
-            // Update the user's security settings
-            await prisma.user.update({
-                where: {
-                    id: userID,
-                },
-                data: {
-                    security: {
-                        update: {
-                            twoFactorEnabled: true,
-                            twoFactorSecret: secret,
-                        },
-                    },
-                },
-            })
+			// Update the user's security settings
+			await prisma.user.update({
+				where: {
+					id: userID,
+				},
+				data: {
+					security: {
+						update: {
+							twoFactorEnabled: true,
+							twoFactorSecret: secret,
+						},
+					},
+				},
+			})
 
-            return { status: 'success' }
-        } catch (error) {
-            Logger.error((error as Error).message, true)
-            return {
-                status: 'internal-error',
-            }
-        }
-    }
+			return { status: 'success' }
+		} catch (error) {
+			Logger.error((error as Error).message, true)
+			return {
+				status: 'internal-error',
+			}
+		}
+	}
 
-    public async disableTwoFactorAuth(userID: string) {
-        try {
-            await prisma.user.update({
-                where: {
-                    id: userID,
-                },
-                data: {
-                    security: {
-                        update: {
-                            twoFactorEnabled: false,
-                            twoFactorSecret: null,
-                        },
-                    },
-                },
-            })
+	public async disableTwoFactorAuth(userID: string) {
+		try {
+			await prisma.user.update({
+				where: {
+					id: userID,
+				},
+				data: {
+					security: {
+						update: {
+							twoFactorEnabled: false,
+							twoFactorSecret: null,
+						},
+					},
+				},
+			})
 
-            return { status: 'success' }
-        } catch (error) {
-            Logger.error((error as Error).message, true)
-            return {
-                status: 'internal-error',
-            }
-        }
-    }
+			return { status: 'success' }
+		} catch (error) {
+			Logger.error((error as Error).message, true)
+			return {
+				status: 'internal-error',
+			}
+		}
+	}
 }
 
 export default ProfileService.getInstance()
