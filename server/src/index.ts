@@ -13,6 +13,17 @@ import Logger from './utils/logger'
 
 import 'dotenv/config'
 
+import accounts from './services/accounts'
+
+accounts.registerUser(
+	'Fernando Rivera',
+	'asterki.dev@proton.me',
+	'password',
+	'USD',
+	'en',
+	'America/New_York'
+)
+
 class Server {
 	private static instance: Server | null = null
 

@@ -20,7 +20,15 @@ const router = express.Router();
 router.get('/me', accountsFetch);
 
 // Register account
-router.post('/register', accountsRegister);
+const registerSchema = z.object({
+  email: z.string().email(),
+  name: z.string().min(3).max(100),
+  password: z.string().min(8).max(100),
+  currency: z.string().min(3).max(3),
+  language: z.string().min(2).max(2),
+  timezone: z.string().min(3).max(100),
+});
+router.post('/register', validateRequestBody(registerSchema), accountsRegister);
 
 // Login account
 const loginSchema = z.object({

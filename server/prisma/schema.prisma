@@ -1,4 +1,3 @@
-// schema.prisma
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
@@ -10,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id           String           @id @default(cuid()) @db.Uuid
+  id           String           @id @default(uuid()) 
   email        String           @unique
   passwordHash String
   name         String
@@ -26,24 +25,24 @@ model User {
 }
 
 model Session {
-  id        String   @id
+  id        String   @id @default(uuid())
   sid       String   @unique
   data      String
-  expiresAt   DateTime
+  expiresAt DateTime
 }
 
 model UserPreferences {
-  id       String  @id @default(cuid()) @db.Uuid
+  id       String  @id @default(uuid()) 
   currency String
   language String
   timezone String
-  theme    String
-  userId   String? @unique @db.Uuid
+  theme    String  @default("light")
+  userId   String? @unique
   user     User?   @relation(fields: [userId], references: [id])
 }
 
 model Expense {
-  id          String   @id @default(cuid()) @db.Uuid
+  id          String   @id @default(uuid()) 
   amount      Float
   category    String
   description String?
@@ -51,24 +50,24 @@ model Expense {
   tags        String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  userId      String   @db.Uuid
+  userId      String   
   user        User     @relation(fields: [userId], references: [id])
 }
 
 model Income {
-  id          String   @id @default(cuid()) @db.Uuid
+  id          String   @id @default(uuid()) 
   amount      Float
   source      String
   date        DateTime
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  userId      String   @db.Uuid
+  userId      String   
   user        User     @relation(fields: [userId], references: [id])
 }
 
 model Budget {
-  id        String       @id @default(cuid()) @db.Uuid
+  id        String       @id @default(uuid()) 
   category  String
   amount    Float
   startDate DateTime
@@ -76,12 +75,12 @@ model Budget {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   status    BudgetStatus
-  userId    String       @db.Uuid
+  userId    String       
   user      User         @relation(fields: [userId], references: [id])
 }
 
 model Transaction {
-  id          String          @id @default(cuid()) @db.Uuid
+  id          String          @id @default(uuid()) 
   amount      Float
   type        TransactionType
   category    String
@@ -90,12 +89,12 @@ model Transaction {
   tags        String[]
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
-  userId      String          @db.Uuid
+  userId      String          
   user        User            @relation(fields: [userId], references: [id])
 }
 
 model SavingsGoal {
-  id            String            @id @default(cuid()) @db.Uuid
+  id            String            @id @default(uuid()) 
   targetAmount  Float
   currentAmount Float
   description   String
@@ -103,19 +102,19 @@ model SavingsGoal {
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
   status        SavingsGoalStatus
-  userId        String            @db.Uuid
+  userId        String            
   user          User              @relation(fields: [userId], references: [id])
 }
 
 model Security {
-  id                   String    @id @default(cuid()) @db.Uuid
+  id                   String    @id @default(uuid()) 
   resetToken           String?
   resetTokenExpiration DateTime?
   twoFactorEnabled     Boolean   @default(false)
   twoFactorSecret      String?
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
-  userId               String    @unique @db.Uuid
+  userId               String    @unique 
   user                 User      @relation(fields: [userId], references: [id])
 }
 

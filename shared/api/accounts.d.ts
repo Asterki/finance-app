@@ -18,3 +18,16 @@ export interface LoginRequestBody {
 export interface LoginResponseData {
   status: 'success' | 'unauthenticated' | 'invalid-credentials' | 'tfa-required' 
 }
+
+export interface RegisterRequestBody {
+  email: string
+  name: string
+  password: string
+  currency: string
+  language: string
+  timezone: string
+}
+
+export interface RegisterResponseData {
+  status: 'success' | 'user-exists' | 'internal-error'
+}

@@ -9,7 +9,8 @@ import type { User } from '../../../shared/models'
 import { PrismaClient } from '@prisma/client'
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
 
-const prisma = new PrismaClient()
+import prismaSingleton from '../config/prisma'
+const prisma = prismaSingleton.getClient()
 
 class SessionManager {
 	authStrategies: { [key: string]: passportLocal.Strategy }
