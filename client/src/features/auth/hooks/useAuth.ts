@@ -54,12 +54,14 @@ const useAuth = () => {
 		dispatch(setAuthStatus('loading'))
 
 		const result = await authApi.login(email, password, tfaCode)
-		if (result === 'success') {
+		if (result.status === 'success') {
 			// Set the user to the state
 			const userResult = await authApi.fetchUser()
 			dispatch(setUser(userResult.user!))
 			dispatch(setAuthStatus('authenticated'))
-			return 'success'
+			return {
+				status: 'success',
+			}
 		} else {
 			return result
 		}
