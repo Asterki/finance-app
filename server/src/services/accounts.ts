@@ -64,7 +64,6 @@ class AccountService {
 				user: user as unknown as User,
 			}
 		} catch (error) {
-			console.log(error)
 			Logger.error((error as Error).message, true)
 			return {
 				status: 'internal-error',
@@ -224,6 +223,18 @@ class AccountService {
 		return {
 			status: 'success',
 		}
+	}
+
+	public async authenticatePassword(userID: string, password: string) {
+		const user = await prisma.user.findFirst({
+			where: {
+				id: userID,
+			},
+		})
+		if (!user) return false
+
+		if (!bcrypt.compareSync(password, user.passwordHash)) return false
+		return true
 	}
 }
 
