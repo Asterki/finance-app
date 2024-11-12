@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express'
 import {
 	EnableTFAResponseData as ResponseData,
 	EnableTFARequestBody as RequestBody,
-} from '../../../../shared/api/profile'
+} from '../../../../shared/api/preferences'
 
 import { User } from '@prisma/client'
 

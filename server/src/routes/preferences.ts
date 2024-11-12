@@ -9,9 +9,9 @@ import { validateRequestBody } from '../middleware/validationMiddleware'
 import errorHandler from '../middleware/errorHandler'
 
 // Import handlers
-import profileEnableTFA from '../controllers/profile/enableTFA'
-import profileDisableTFA from '../controllers/profile/disableTFA'
-import profileUpdate from '../controllers/profile/update'
+import preferencesEnableTFA from '../controllers/preferences/enableTFA'
+import preferencesDisableTFA from '../controllers/preferences/disableTFA'
+import preferencesUpdate from '../controllers/preferences/update'
 
 const router = express.Router()
 
@@ -23,7 +23,7 @@ const enableTFASchema = z.object({
 router.post(
 	'/enableTFA',
 	validateRequestBody(enableTFASchema),
-	profileEnableTFA
+	preferencesEnableTFA
 )
 
 // Disable TFA
@@ -33,7 +33,7 @@ const disableTFASchema = z.object({
 router.post(
 	'/disableTFA',
 	validateRequestBody(disableTFASchema),
-	profileDisableTFA
+	preferencesDisableTFA
 )
 
 // Update Profile
@@ -47,7 +47,7 @@ router.post(
 	'/update',
 	ensureAuthenticated,
 	validateRequestBody(updateProfileSchema),
-	profileUpdate
+	preferencesUpdate
 )
 
 export default router

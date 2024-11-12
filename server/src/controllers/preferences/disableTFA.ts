@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express'
 import {
 	DisableTFAResponseData as ResponseData,
 	DisableTFARequestBody as RequestBody,
-} from '../../../../shared/api/profile'
+} from '../../../../shared/api/preferences'
 
 import { User } from '@prisma/client'
 
