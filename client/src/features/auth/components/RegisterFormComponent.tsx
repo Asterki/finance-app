@@ -202,7 +202,7 @@ const RegisterForm: React.FC<LoginFormProps> = ({
 			</div>
 
 			{authStatus == 'authenticated' && (
-				<div className="mt-4">
+				<div className="mt-4 dark:text-white">
 					<span className="font-bold">Important Notice:</span> You're
 					already logged in as{' '}
 					<span className="font-semibold">{user?.name}</span>, by

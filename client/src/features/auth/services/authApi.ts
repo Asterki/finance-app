@@ -65,7 +65,7 @@ const login = async (email: string, password: string, tfaCode: string = '') => {
 				withCredentials: true,
 			}
 		)
-		return res.data.status
+		return res.data
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			return {
