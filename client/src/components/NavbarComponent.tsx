@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { User } from '../../../shared/types/models';
+import { User } from '../../../shared/models';
 
 import { FaCog, FaUser, FaDoorOpen, FaChevronCircleDown } from 'react-icons/fa';
 
@@ -20,7 +20,7 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
   return (
     <div className='w-full flex flex-col' ref={component}>
       {props.user && (
-        <div className={props.user?.preferences.general.theme == 'dark' ? 'dark' : ''}>
+        <div className={props.user?.preferences.theme == 'dark' ? 'dark' : ''}>
           <div className='text-neutral-700 w-full flex items-center justify-between p-4 h-16 dark:bg-gray-700 bg-white shadow-md z-10 absolute top-0'>
             <Link
               onClick={() => {
@@ -30,7 +30,7 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
               className='text-2xl dark:text-white text-neutral-800 font-bold flex items-center gap-2'
             >
               <img src='/assets/images/logo-no-background.png' className='w-8' />
-              DIMLIM
+              Finance App
             </Link>
             <div className='w-auto md:w-2/12'>
               <DropdownMenu.Root
@@ -49,7 +49,7 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                         className='mr-2 rounded-full'
                       />
                     </div>
-                    <div className='dark:text-white'>{props.user.profile.username}</div>
+                    <div className='dark:text-white'>{props.user.name}</div>
                   </div>
                   <div  className={`dark:text-white/40 text-black/30 ${menuOpen ? 'rotate-180' : ''} transition-all `}>
                     <FaChevronCircleDown />

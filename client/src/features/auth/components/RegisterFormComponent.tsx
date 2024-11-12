@@ -7,7 +7,7 @@ import { FaSpinner } from 'react-icons/fa';
 
 import { motion } from 'framer-motion';
 
-import { User } from '../../../../../shared/types/models';
+import { User } from '../../../../../shared/models';
 
 interface LoginFormProps {
   onSubmit: (email: string, username: string, password: string, repeatPassword: string) => Promise<void>;
@@ -147,7 +147,7 @@ const RegisterForm: React.FC<LoginFormProps> = ({ onSubmit, registerLoading, use
       {authStatus == 'authenticated' && (
         <div className='mt-4'>
           <span className='font-bold'>Important Notice:</span> You're already logged in as{' '}
-          <span className='font-semibold'>{user?.profile.username}</span>, by registering a new account you will be
+          <span className='font-semibold'>{user?.name}</span>, by registering a new account you will be
           logged out from this account.{' '}
           <Link to='/home' className='text-blue-500 hover:underline'>
             Return Home

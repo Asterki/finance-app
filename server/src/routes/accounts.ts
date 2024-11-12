@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { ensureAuthenticated } from '../middleware/authMiddleware';
 import { validateRequestBody } from '../middleware/validationMiddleware';
 import errorHandler from '../middleware/errorHandler';
+import loggingMiddleware from '../middleware/loggingMiddleware';
 
 // Import handlers
 import accountsFetch from '../controllers/accounts/fetch';
@@ -43,5 +44,6 @@ router.post('/logout', ensureAuthenticated, accountsLogout);
 
 // Apply the error handling middleware
 router.use(errorHandler);
+router.use(loggingMiddleware);
 
 export default router;

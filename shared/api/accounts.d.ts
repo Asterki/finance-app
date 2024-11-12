@@ -10,24 +10,29 @@ export interface LogoutResponseData {
 }
 
 export interface LoginRequestBody {
-  email: string
-  password: string
-  tfaCode?: string
+	email: string
+	password: string
+	tfaCode?: string
 }
 
 export interface LoginResponseData {
-  status: 'success' | 'unauthenticated' | 'invalid-credentials' | 'tfa-required' 
+	status:
+		| 'success'
+		| 'unauthenticated'
+		| 'invalid-credentials'
+		| 'tfa-required'
+		| 'invalid-tfa-code'
 }
 
 export interface RegisterRequestBody {
-  email: string
-  name: string
-  password: string
-  currency: string
-  language: string
-  timezone: string
+	email: string
+	name: string
+	password: string
+	currency: string
+	language: string
+	timezone: string
 }
 
 export interface RegisterResponseData {
-  status: 'success' | 'user-exists' | 'internal-error'
+	status: 'success' | 'user-exists' | 'internal-error'
 }

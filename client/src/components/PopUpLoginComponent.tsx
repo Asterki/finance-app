@@ -65,7 +65,7 @@ const PopUpLogin = () => {
       case 'success':
         showNotification('Successfully logged in', 'You have successfully logged in', 'success');
         break;
-      case 'requires-tfa':
+      case 'tfa-required':
         // Since the TFA modal doesn't have access to the LoginForm state, we need to store the email/username and password in the component state
         setEmailOrUsername(emailOrUsername);
         setPassword(password);

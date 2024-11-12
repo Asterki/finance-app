@@ -7,8 +7,6 @@ const errorHandler = (
 	res: Response,
 	next: NextFunction
 ) => {
-	console.error(err.stack)
-
 	if (err instanceof CustomError) {
 		res.status(err.statusCode).send({
 			status: 'error',
