@@ -44,7 +44,7 @@ const PageLayout: React.FC<LayoutProps> = ({ children, requiresLogin = false, no
         />
       )}
 
-      <main className='flex-grow'>{children}</main>
+      <main className='flex-grow pt-16'>{children}</main>
 
       <FooterComponent />
 

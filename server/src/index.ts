@@ -8,6 +8,7 @@ import cookie from 'cookie-parser'
 
 // Services
 import Router from './routes'
+import SessionManager from './services/sessions'
 
 import Logger from './utils/logger'
 
@@ -30,6 +31,7 @@ class Server {
 	// Server related
 	app: Express = express()
 	httpServer: ReturnType<typeof createServer> = createServer(this.app)
+	sessionManager: SessionManager = new SessionManager().getInstance()
 	port: number
 	dev: boolean
 
@@ -49,6 +51,7 @@ class Server {
 
 	async startServer() {
 		this.loadMiddlewares()
+		this.sessionManager.loadToServer(this.app)
 		this.router.registerRoutes(this.app)
 
 		this.httpServer.listen(this.port, () => {

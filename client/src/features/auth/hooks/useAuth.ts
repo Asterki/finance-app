@@ -38,7 +38,7 @@ const useAuth = () => {
 				dispatch(setAuthStatus('authenticated'))
 				return 'success'
 			}
-			return currentUserStatus
+			return currentUserStatus.status
 		} else {
 			dispatch(setAuthStatus('unauthenticated'))
 			return result

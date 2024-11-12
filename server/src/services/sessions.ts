@@ -10,6 +10,7 @@ import { PrismaClient } from '@prisma/client'
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
 
 import prismaSingleton from '../config/prisma'
+import logger from '../utils/logger'
 const prisma = prismaSingleton.getClient()
 
 class SessionManager {
@@ -94,6 +95,8 @@ class SessionManager {
 		)
 		server.use(passport.initialize())
 		server.use(passport.session())
+
+		logger.info('Session manager loaded to server')
 	}
 
 	private loadStrategies() {
