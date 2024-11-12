@@ -1,7 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 // Main
-import Landing from './main/landing'	
+import Landing from './main/landing'
+import Home from './main/home'
 
 // Accounts
 import AccountLogin from './accounts/login'
@@ -14,11 +15,12 @@ import AdminTest from './admin/tests'
 const router = createBrowserRouter([
 	// Main
 	{
-		path: "/",
+		path: '/',
 		element: <Landing />,
 	},
 	{
-		
+		path: '/home',
+		element: <Home />,
 	},
 
 	// Accounts
