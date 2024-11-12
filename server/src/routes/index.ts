@@ -2,6 +2,7 @@ import type { Express } from 'express';
 
 // Import the routers
 import AccountsRouter from './accounts';
+import ProfileRouter from "./profile"
 
 class Router {
   private instance: Router | null = null;
@@ -15,6 +16,7 @@ class Router {
 
   public registerRoutes = (server: Express) => {
     server.use('/api/accounts', AccountsRouter);
+    server.use('/api/profile', ProfileRouter);
   };
 }
 

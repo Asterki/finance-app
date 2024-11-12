@@ -18,7 +18,7 @@ const enableTFAHandler = async (
 		const user = req.user as User
 
         const result = await ProfileService.activateTwoFactorAuth(user.id, secret, code)
-		return res.status(200).send(result)
+		res.status(200).send(result)
 	} catch (error) {
 		next(error)
 	}

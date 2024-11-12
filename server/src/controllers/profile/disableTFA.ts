@@ -24,9 +24,9 @@ const disableTFAHandler = async (
 		)
 		if (validPassword) {
 			const result = await ProfileService.disableTwoFactorAuth(user.id)
-			return res.status(200).send(result)
+			res.status(200).send(result)
 		} else {
-			return res.status(200).send({ status: 'invalid-password' })
+			res.status(200).send({ status: 'invalid-password' })
 		}
 	} catch (error) {
 		next(error)
