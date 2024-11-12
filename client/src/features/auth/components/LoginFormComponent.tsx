@@ -49,7 +49,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 			initial="hidden"
 			animate="showing"
 			transition={{ duration: 0.5 }}
-			className="bg-white dark:bg-neutral-700 rounded-sm shadow-md p-6 md:w-4/12"
+			className="bg-white dark:bg-neutral-700 rounded-sm shadow-md p-6 w-full"
 		>
 			<div className="flex flex-col items-center gap-2">
 				<img src="/icon.svg" className="w-8" />

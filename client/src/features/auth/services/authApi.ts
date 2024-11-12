@@ -39,8 +39,9 @@ const fetchUser = async () => {
 
 const logout = async () => {
 	try {
-		const response = await axios.get<LogoutResponseData>(
+		const response = await axios.post<LogoutResponseData>(
 			`${apiEndpoint}/logout`,
+			{},
 			{
 				withCredentials: true,
 			}

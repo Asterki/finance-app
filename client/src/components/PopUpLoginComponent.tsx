@@ -61,7 +61,7 @@ const PopUpLogin = () => {
     setLoginLoading(true);
     const result = await login(emailOrUsername, password, tfaCode);
 
-    switch (result) {
+    switch (result.status) {
       case 'success':
         showNotification('Successfully logged in', 'You have successfully logged in', 'success');
         break;
@@ -104,7 +104,7 @@ const PopUpLogin = () => {
         }}
       />
 
-      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12'>
+      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-neutral-700  rounded-md shadow-md p-4 w-11/12 md:w-4/12'>
         <p className='mb-4 text-center'>
           The page you're trying to access requires you to be logged in. Please login to continue.
         </p>

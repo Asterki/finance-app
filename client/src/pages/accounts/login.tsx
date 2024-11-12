@@ -71,12 +71,14 @@ const AccountsLoginPage = () => {
 			className="min-h-screen bg-[url('/img/bg.jpg')]"
 		>
 			<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex items-center justify-center">
-				<LoginForm
-					user={user}
-					authStatus={authStatus}
-					onSubmit={onSubmitButtonClick}
-					loginLoading={loginLoading}
-				/>
+				<div className="w-4/12">
+					<LoginForm
+						user={user}
+						authStatus={authStatus}
+						onSubmit={onSubmitButtonClick}
+						loginLoading={loginLoading}
+					/>
+				</div>
 			</div>
 		</PageLayout>
 	)
