@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-const useProfile = () => {
-    
+const usePreferences = () => {
+    const [preferences, setPreferences] = React.useState({
+        
+    })
 }
 
-export default useProfile;
+export default usePreferences;

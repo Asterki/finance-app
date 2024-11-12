@@ -1,7 +1,7 @@
 import axios from 'axios'
 import handleResponseError from '../../../utils/handleResponseError'
 
-const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/profile`
+const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/preferences`
 
 const enableTFA = async (code: string, secret: string) => {
 	try {

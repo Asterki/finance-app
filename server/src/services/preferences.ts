@@ -5,16 +5,16 @@ import Logger from '../utils/logger'
 import prismaSingleton from '../config/prisma'
 const prisma = prismaSingleton.getClient()
 
-class ProfileService {
-	private static instance: ProfileService
+class PreferencesService {
+	private static instance: PreferencesService
 
 	private constructor() {}
 
-	public static getInstance(): ProfileService {
-		if (!ProfileService.instance) {
-			ProfileService.instance = new ProfileService()
+	public static getInstance(): PreferencesService {
+		if (!PreferencesService.instance) {
+			PreferencesService.instance = new PreferencesService()
 		}
-		return ProfileService.instance
+		return PreferencesService.instance
 	}
 
 	public async updateUserProfile(
@@ -119,6 +119,23 @@ class ProfileService {
 			}
 		}
 	}
+
+	public async getProfile(userID: string) {
+		const user = await prisma.user.findUnique({
+			where: {
+				id: userID,
+			},
+			select: {
+				preferences: true,
+			},
+		})
+
+		if (!user) {
+			return null
+		}
+
+		return user.preferences
+	}
 }
 
-export default ProfileService.getInstance()
+export default PreferencesService.getInstance()

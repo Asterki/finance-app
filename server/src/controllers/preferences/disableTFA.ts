@@ -1,4 +1,4 @@
-import ProfileService from '../../services/profile'
+import PreferencesService from '../../services/preferences'
 import AccountService from '../../services/accounts'
 
 import { NextFunction, Request, Response } from 'express'
@@ -23,7 +23,7 @@ const disableTFAHandler = async (
 			password
 		)
 		if (validPassword) {
-			const result = await ProfileService.disableTwoFactorAuth(user.id)
+			const result = await PreferencesService.disableTwoFactorAuth(user.id)
 			res.status(200).send(result)
 		} else {
 			res.status(200).send({ status: 'invalid-password' })

@@ -1,4 +1,4 @@
-import ProfileService from '../../services/profile'
+import PreferencesService from '../../services/preferences'
 
 import { NextFunction, Request, Response } from 'express'
 import {
@@ -17,7 +17,7 @@ const enableTFAHandler = async (
         const { code, secret } = req.body
 		const user = req.user as User
 
-        const result = await ProfileService.activateTwoFactorAuth(user.id, secret, code)
+        const result = await PreferencesService.activateTwoFactorAuth(user.id, secret, code)
 		res.status(200).send(result)
 	} catch (error) {
 		next(error)
