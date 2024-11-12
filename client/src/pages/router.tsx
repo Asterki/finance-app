@@ -1,5 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom'
 
+// Main
+import Landing from './main/landing'	
+
 // Accounts
 import AccountLogin from './accounts/login'
 import AccountRegister from './accounts/register'
@@ -9,6 +12,15 @@ import AccountLogout from './accounts/logout'
 import AdminTest from './admin/tests'
 
 const router = createBrowserRouter([
+	// Main
+	{
+		path: "/",
+		element: <Landing />,
+	},
+	{
+		
+	},
+
 	// Accounts
 	{
 		path: '/login',
