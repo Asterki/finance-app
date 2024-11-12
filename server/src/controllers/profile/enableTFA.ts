@@ -8,7 +8,7 @@ import {
 
 import { User } from '@prisma/client'
 
-const accountsFetch = async (
+const enableTFAHandler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
 	next: NextFunction
@@ -24,4 +24,4 @@ const accountsFetch = async (
 	}
 }
 
-export default accountsFetch
+export default enableTFAHandler

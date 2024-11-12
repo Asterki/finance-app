@@ -93,7 +93,9 @@ class ProfileService {
 		}
 	}
 
-	public async disableTwoFactorAuth(userID: string) {
+	public async disableTwoFactorAuth(
+		userID: string
+	): Promise<{ status: 'success' | 'internal-error' }> {
 		try {
 			await prisma.user.update({
 				where: {
