@@ -25,9 +25,9 @@ class ProfileService {
 			timezone: string
 			language: string
 		}
-	) {
+	): Promise<{ status: 'success' | 'internal-error' }> {
 		try {
-			const user = await prisma.user.update({
+			await prisma.user.update({
 				where: {
 					id: userID,
 				},
@@ -43,7 +43,7 @@ class ProfileService {
 				},
 			})
 
-			return { status: 'success', user }
+			return { status: 'success' }
 		} catch (error) {
 			Logger.error((error as Error).message, true)
 			return {

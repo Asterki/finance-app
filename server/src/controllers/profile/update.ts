@@ -2,26 +2,32 @@ import ProfileService from '../../services/profile'
 
 import { NextFunction, Request, Response } from 'express'
 import {
-	EnableTFAResponseData as ResponseData,
-	EnableTFARequestBody as RequestBody,
+	UpdateProfileResponseData as ResponseData,
+	UpdateProfileRequestBody as RequestBody,
 } from '../../../../shared/api/profile'
 
 import { User } from '@prisma/client'
 
-const enableTFAHandler = async (
+const profileUpdateHandler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
 	next: NextFunction
 ) => {
 	try {
-        const { code, secret } = req.body
+		const { currency, language, theme, timezone } = req.body
 		const user = req.user as User
 
-        const result = await ProfileService.activateTwoFactorAuth(user.id, secret, code)
+		const result = await ProfileService.updateUserProfile(user.id, {
+			currency,
+			language,
+			theme,
+			timezone,
+		})
+
 		res.status(200).send(result)
 	} catch (error) {
 		next(error)
 	}
 }
 
-export default enableTFAHandler
+export default profileUpdateHandler

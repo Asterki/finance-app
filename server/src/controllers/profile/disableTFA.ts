@@ -3,7 +3,7 @@ import AccountService from '../../services/accounts'
 
 import { NextFunction, Request, Response } from 'express'
 import {
-	DisableTFAResponseBody as ResponseData,
+	DisableTFAResponseData as ResponseData,
 	DisableTFARequestBody as RequestBody,
 } from '../../../../shared/api/profile'
 
