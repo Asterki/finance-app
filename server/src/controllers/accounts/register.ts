@@ -7,7 +7,6 @@ import {
 } from '../../../../shared/api/accounts'
 
 import CustomError from '../../utils/customError'
-import Logger from '../../utils/logger'
 
 const handler = async (
 	req: Request<{}, {}, RequestBody>,

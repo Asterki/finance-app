@@ -1,99 +1,115 @@
-/**
- * authApi Service
- *
- * This module provides functions to interact with the authentication API, including:
- * - Fetching the current authenticated user
- * - Logging in a user
- * - Logging out the current user
- * - Registering a new user
- *
- * Functions:
- * - fetchUser: Fetches the current authenticated user from the server.
- * - login: Logs in a user with email/username, password, and optional TFA code.
- * - logout: Logs out the current user.
- * - register: Registers a new user with username, email, and password.
- *
- * Usage:
- * import authApi from './authApi';
- *
- * const user = await authApi.fetchUser();
- * const loginStatus = await authApi.login(emailOrUsername, password, tfaCode);
- * const logoutStatus = await authApi.logout();
- * const registerStatus = await authApi.register(username, email, password);
- */
-
-import axios from 'axios';
+import axios from 'axios'
+import handleResponseError from '../../../utils/handleResponseError'
 
 import type {
-  LoginRequestBody,
-  LoginResponseData,
-  LogoutResponseData,
-  FetchResponseData,
-  RegisterRequestBody,
-  RegisterResponseData,
-} from '../../../../../shared/types/api/accounts';
+	LoginRequestBody,
+	LoginResponseData,
+	LogoutResponseData,
+	FetchResponseData,
+	RegisterRequestBody,
+	RegisterResponseData,
+} from '../../../../../shared/api/accounts'
 
-const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/accounts`;
+const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/accounts`
 
 const fetchUser = async () => {
-  try {
-    const res = await axios.get<FetchResponseData>(`${apiEndpoint}/fetch`, {
-      withCredentials: true,
-    });
-    return res.data.user;
-  } catch (error) {
-    return null;
-  }
-};
+	try {
+		const res = await axios.get<FetchResponseData>(`${apiEndpoint}/me`, {
+			withCredentials: true,
+		})
+
+		return {
+			status: res.data.status,
+			user: res.data.status === 'success' ? res.data.user : null,
+		}
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				status: handleResponseError(error),
+				user: null,
+			}
+		} else {
+			return {
+				status: 'unknown-error',
+				user: null,
+			}
+		}
+	}
+}
 
 const logout = async () => {
-  try {
-    await axios.get<LogoutResponseData>(`${apiEndpoint}/logout`, {
-      withCredentials: true,
-    });
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
+	try {
+		const response = await axios.get<LogoutResponseData>(
+			`${apiEndpoint}/logout`,
+			{
+				withCredentials: true,
+			}
+		)
+		return response.data.status == 'success'
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	} catch (err) {
+		return false
+	}
+}
 
-const login = async (emailOrUsername: string, password: string, tfaCode: string = '') => {
-  try {
-    const res = await axios.post<LoginResponseData>(
-      `${apiEndpoint}/login`,
-      {
-        emailOrUsername,
-        password,
-        tfaCode,
-      } as LoginRequestBody,
-      {
-        withCredentials: true,
-      },
-    );
-    return res.data.status;
-  } catch (error) {
-    return null;
-  }
-};
+const login = async (email: string, password: string, tfaCode: string = '') => {
+	try {
+		const res = await axios.post<LoginResponseData>(
+			`${apiEndpoint}/login`,
+			{
+				email,
+				password,
+				tfaCode,
+			} as LoginRequestBody,
+			{
+				withCredentials: true,
+			}
+		)
+		return res.data.status
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				status: handleResponseError(error),
+			}
+		} else {
+			return {
+				status: 'unknown-error',
+			}
+		}
+	}
+}
 
-const register = async (username: string, email: string, password: string, pubKey: string) => {
-  try {
-    const res = await axios.post<RegisterResponseData>(
-      `${apiEndpoint}/register`,
-      {
-        username,
-        email,
-        password,
-        pubKey,
-      } as RegisterRequestBody,
-      {
-        withCredentials: true,
-      },
-    );
-    return res.data.status;
-  } catch (error) {
-    return null;
-  }
-};
+const register = async (
+	name: string,
+	email: string,
+	password: string,
+	currency: string,
+	language: string,
+	timezone: string
+) => {
+	try {
+		const res = await axios.post<RegisterResponseData>(
+			`${apiEndpoint}/register`,
+			{
+				name,
+				email,
+				password,
+				currency,
+				language,
+				timezone,
+			} as RegisterRequestBody,
+			{
+				withCredentials: true,
+			}
+		)
+		return res.data.status
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return handleResponseError(error)
+		} else {
+			return 'unknown-error'
+		}
+	}
+}
 
-export default { fetchUser, logout, login, register };
+export default { fetchUser, logout, login, register }
