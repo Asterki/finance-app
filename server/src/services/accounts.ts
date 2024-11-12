@@ -88,7 +88,7 @@ class AccountService {
 				},
 				data: {
 					resetToken,
-				}
+				},
 			})
 
 			return {
@@ -121,14 +121,8 @@ class AccountService {
 			if (!user) return { status: 'internal-error' }
 			// Check passwords and TFA CODE
 
-			if (
-				!bcrypt.compareSync(
-					password,
-					user.passwordHash
-				)
-			)
+			if (!bcrypt.compareSync(password, user.passwordHash))
 				return { status: 'invalid-password' }
-
 
 			if (user.security?.twoFactorEnabled) {
 				if (
@@ -149,7 +143,7 @@ class AccountService {
 				include: {
 					security: true,
 					preferences: true,
-				}
+				},
 			})
 			return {
 				status: 'success',
@@ -159,6 +153,76 @@ class AccountService {
 			return {
 				status: 'internal-error',
 			}
+		}
+	}
+
+	public async recoverPassword(
+		userID: string,
+		resetToken: string,
+		newPassword: string
+	) {
+		try {
+			const user = await prisma.user.findFirst({
+				where: {
+					id: userID,
+				},
+			})
+			if (!user) return
+
+			await prisma.security.update({
+				where: {
+					userId: user.id,
+				},
+				data: {
+					resetToken: null,
+				},
+			})
+
+			await prisma.user.update({
+				where: {
+					id: user.id,
+				},
+				data: {
+					passwordHash: bcrypt.hashSync(newPassword, 10),
+				},
+			})
+
+			return {
+				status: 'success',
+			}
+		} catch (error) {
+			Logger.error((error as Error).message, true)
+			return {
+				status: 'internal-error',
+			}
+		}
+	}
+
+	public async changePassword(
+		userID: string,
+		oldPassword: string,
+		newPassword: string
+	) {
+		const user = await prisma.user.findFirst({
+			where: {
+				id: userID,
+			},
+		})
+		if (!user) return
+
+		if (!bcrypt.compareSync(oldPassword, user.passwordHash)) return
+
+		await prisma.user.update({
+			where: {
+				id: user.id,
+			},
+			data: {
+				passwordHash: bcrypt.hashSync(newPassword, 10),
+			},
+		})
+
+		return {
+			status: 'success',
 		}
 	}
 }
