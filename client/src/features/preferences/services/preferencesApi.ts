@@ -87,8 +87,32 @@ const updateProfile = async (profile: {
 	}
 }
 
+const fetchPreferences = async () => {
+	try {
+		const response = await axios.get(`${apiEndpoint}/fetch`, {
+			withCredentials: true,
+		})
+
+		return {
+			status: response.data.status,
+			preferences: response.data.preferences,
+		}
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				status: handleResponseError(error),
+			}
+		} else {
+			return {
+				status: 'unknown-error',
+			}
+		}
+	}
+}
+
 export default {
 	enableTFA,
 	disableTFA,
 	updateProfile,
+	fetchPreferences
 }

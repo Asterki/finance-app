@@ -1,30 +1,30 @@
 import PreferencesService from '../../services/preferences'
 
 import { NextFunction, Request, Response } from 'express'
-import {
-	UpdateProfileResponseData as ResponseData,
-	UpdateProfileRequestBody as RequestBody,
-} from '../../../../shared/api/preferences'
+import { FetchPreferencesResponseData as ResponseData } from '../../../../shared/api/preferences'
 
 import { User } from '@prisma/client'
 
 const profileUpdateHandler = async (
-	req: Request<{}, {}, RequestBody>,
+	req: Request,
 	res: Response<ResponseData>,
 	next: NextFunction
 ) => {
 	try {
-		const { currency, language, theme, timezone } = req.body
 		const user = req.user as User
+		const result = await PreferencesService.getPreferences(user.id)
 
-		const result = await PreferencesService.updateUserProfile(user.id, {
-			currency,
-			language,
-			theme,
-			timezone,
+		if (!result) {
+			res.status(200).send({
+				status: 'unauthenticated',
+			})
+			return
+		}
+
+		res.status(200).send({
+			status: 'success',
+			preferences: result,
 		})
-
-		res.status(200).send(result)
 	} catch (error) {
 		next(error)
 	}

@@ -120,7 +120,7 @@ class PreferencesService {
 		}
 	}
 
-	public async getProfile(userID: string) {
+	public async getPreferences(userID: string) {
 		const user = await prisma.user.findUnique({
 			where: {
 				id: userID,

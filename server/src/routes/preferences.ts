@@ -12,6 +12,7 @@ import errorHandler from '../middleware/errorHandler'
 import preferencesEnableTFA from '../controllers/preferences/enableTFA'
 import preferencesDisableTFA from '../controllers/preferences/disableTFA'
 import preferencesUpdate from '../controllers/preferences/update'
+import preferencesFetch from '../controllers/preferences/fetch'
 
 const router = express.Router()
 
@@ -49,5 +50,8 @@ router.post(
 	validateRequestBody(updateProfileSchema),
 	preferencesUpdate
 )
+
+// Fetch
+router.get('/fetch', ensureAuthenticated, preferencesFetch)
 
 export default router
