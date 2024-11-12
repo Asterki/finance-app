@@ -4,8 +4,6 @@ import passportLocal from 'passport-local'
 import session from 'express-session'
 import bcrypt from 'bcrypt'
 
-import type { User } from '../../../shared/models'
-
 import { PrismaClient } from '@prisma/client'
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
 

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import Logger from '../utils/logger'
 
-import type { User } from '../../../shared/models'
+import { User } from '@prisma/client'
 
 import prismaSingleton from '../config/prisma'
 const prisma = prismaSingleton.getClient()
