@@ -1,0 +1,31 @@
+# Ignore node_modules for both server and client
+server/node_modules
+client/node_modules
+
+# Ignore build outputs from local development
+server/build
+client/build
+
+# Ignore logs
+*.log
+server/logs
+client/logs
+
+# Ignore environment variables
+.env
+server/.env
+client/.env
+
+# Ignore cache and lock files
+*.cache
+*.lock
+.DS_Store
+
+# Ignore temporary files or local development settings
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Ignore the goddamn database
+*.db

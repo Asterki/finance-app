@@ -1,0 +1,132 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  email      String   @unique
+  password   String
+  board      Board[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
+
+model Board {
+  id               String             @id @default(cuid())
+  created_at       DateTime           @default(now())
+  name             String
+  sensorData       String
+  sensorShareToken String
+  user_id          String?
+  pendingActions   TriggeredActions[]
+  user             User?              @relation(fields: [user_id], references: [id])
+  routines         Routine[]
+}
+
+// This is used to send the actions to the board, it doesn't include any logic
+model TriggeredActions {
+  id          Int    @id @default(autoincrement())
+  actionType  String
+  actionValue Float
+
+  boardId String
+  board   Board  @relation(fields: [boardId], references: [id])
+}
+
+// Refer to typescript types for an object-view of the schema
+model Routine {
+  id                 Int                 @id @default(autoincrement())
+  name               String
+  execution          String
+  active             Boolean         @default(true)
+  automatedExecution AutomatedExecution?
+  actions            Actions?
+
+  board   Board?  @relation(fields: [boardId], references: [id])
+  boardId String?
+}
+
+model AutomatedExecution {
+  id                    Int      @id @default(autoincrement())
+  checkInterval         Int
+  nextExecutionInterval DateTime
+
+  routineId Int?     @unique
+  routine   Routine? @relation(fields: [routineId], references: [id])
+
+  conditionsId Int?        @unique
+  conditions   Conditions? @relation(fields: [conditionsId], references: [id])
+}
+
+model Conditions {
+  id Int @id @default(autoincrement())
+
+  temperatureExceedsId Int       @unique
+  temperatureExceeds   Condition @relation("TemperatureExceeds", fields: [temperatureExceedsId], references: [id])
+
+  temperatureBelowId Int       @unique
+  temperatureBelow   Condition @relation("TemperatureBelow", fields: [temperatureBelowId], references: [id])
+
+  humidityExceedsId Int       @unique
+  humidityExceeds   Condition @relation("HumidityExceeds", fields: [humidityExceedsId], references: [id])
+
+  humidityBelowId Int       @unique
+  humidityBelow   Condition @relation("HumidityBelow", fields: [humidityBelowId], references: [id])
+
+  AutomatedExecution AutomatedExecution[]
+}
+
+model Condition {
+  id                 Int         @id @default(autoincrement())
+  active             Boolean
+  value              Float
+  temperatureExceeds Conditions? @relation("TemperatureExceeds")
+  temperatureBelow   Conditions? @relation("TemperatureBelow")
+  humidityExceeds    Conditions? @relation("HumidityExceeds")
+  humidityBelow      Conditions? @relation("HumidityBelow")
+}
+
+model Actions {
+  id            Int               @id @default(autoincrement())
+  waterId       Int               @unique
+  rotatePanelId Int               @unique
+  notifyId      Int               @unique
+  water         WaterAction       @relation(fields: [waterId], references: [id])
+  rotatePanel   RotatePanelAction @relation(fields: [rotatePanelId], references: [id])
+  notify        NotifyAction      @relation(fields: [notifyId], references: [id])
+
+  routineId Int     @unique
+  routine   Routine @relation(fields: [routineId], references: [id])
+}
+
+model WaterAction {
+  id      Int      @id @default(autoincrement())
+  active  Boolean
+  amount  Float
+  Actions Actions?
+}
+
+model RotatePanelAction {
+  id      Int      @id @default(autoincrement())
+  active  Boolean
+  Actions Actions?
+}
+
+model NotifyAction {
+  id      Int      @id @default(autoincrement())
+  active  Boolean
+  Actions Actions?
+}
+
+// Remove the enum Execution declaration
