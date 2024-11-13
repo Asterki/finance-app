@@ -25,6 +25,8 @@ const PreferencesPage = () => {
 	} = usePreferences()
 
 	const tfaInputRef = React.useRef<HTMLInputElement>(null)
+	const oldPasswordRef = React.useRef<HTMLInputElement>(null)
+	const newPasswordRef = React.useRef<HTMLInputElement>(null)
 
 	const [currentPreferences, setCurrentPreferences] =
 		React.useState(preferences)
@@ -36,7 +38,7 @@ const PreferencesPage = () => {
 		if (preferences && user) return setCurrentPreferences(preferences)
 	}, [preferences, user])
 
-	const saveProfileChanges = async () => {
+	const saveProfileChangesButtonClick = async () => {
 		if (currentPreferences) {
 			const response = await updateProfile(currentPreferences.user)
 			if (response) {
@@ -51,7 +53,7 @@ const PreferencesPage = () => {
 		}
 	}
 
-	const generateTFASecretButton = async () => {
+	const generateTFASecretButtonClick = async () => {
 		if (!user) return
 
 		const secret = (await generateTFASecret()).secret!
@@ -65,7 +67,7 @@ const PreferencesPage = () => {
 		)
 	}
 
-	const enableTFAButton = async () => {
+	const enableTFAButtonClick = async () => {
 		if (!user || !tfaInputRef.current) return
 
 		const response = await enableTFA(tfaInputRef.current.value, secret)
@@ -84,7 +86,7 @@ const PreferencesPage = () => {
 		}
 	}
 
-	const disableTFAButton = async () => {
+	const disableTFAButtonClick = async () => {
 		if (!user) return
 
 		const password = prompt('Enter your password to disable TFA')
@@ -93,11 +95,19 @@ const PreferencesPage = () => {
 		const response = await disableTFA(password)
 
 		if (response.status == 'success') {
-			showNotification("Success", "TFA has been disabled for your account", "success")
+			showNotification(
+				'Success',
+				'TFA has been disabled for your account',
+				'success'
+			)
 			fetchPreferences()
 		} else if (response.status == 'invalid-password') {
 			showNotification('Error', 'Invalid Password', 'error')
 		}
+	}
+
+	const changePasswordButtonClick = async () => {
+		alert("Currently in development")
 	}
 
 	return (
@@ -251,8 +261,6 @@ const PreferencesPage = () => {
 						{currentPreferences && (
 							<input
 								type="text"
-								name=""
-								id=""
 								className="p-2 bg-neutral-700 rounded-sm"
 								placeholder="Your Currency"
 								defaultValue={currentPreferences.user.currency}
@@ -262,7 +270,7 @@ const PreferencesPage = () => {
 
 					<button
 						onClick={() => {
-							saveProfileChanges()
+							saveProfileChangesButtonClick()
 						}}
 						className="mt-4 rounded-sm bg-green-500 text-white p-2 w-full"
 					>
@@ -291,7 +299,7 @@ const PreferencesPage = () => {
 								/>
 								<button
 									onClick={() => {
-										enableTFAButton()
+										enableTFAButtonClick()
 									}}
 									className="rounded-sm bg-green-500 text-white p-2 w-full"
 								>
@@ -305,7 +313,7 @@ const PreferencesPage = () => {
 							!currentPreferences.security.twoFactorEnabled && (
 								<button
 									onClick={() => {
-										generateTFASecretButton()
+										generateTFASecretButtonClick()
 									}}
 									className="rounded-sm bg-green-500 text-white p-2 w-full"
 								>
@@ -316,7 +324,7 @@ const PreferencesPage = () => {
 							currentPreferences.security.twoFactorEnabled && (
 								<button
 									onClick={() => {
-										disableTFAButton()
+										disableTFAButtonClick()
 									}}
 									className="rounded-sm bg-red-500 text-white p-2 w-full"
 								>
@@ -327,12 +335,29 @@ const PreferencesPage = () => {
 
 					<div className="mt-4">
 						<h2 className="text-xl">Change Password</h2>
-						{currentPreferences && <div>ewq</div>}
+						{currentPreferences && (
+							<div className="flex flex-col gap-2">
+								<input
+									type="password"
+									ref={oldPasswordRef}
+									autoComplete="new-password"
+									className="p-2 bg-neutral-700 rounded-sm"
+									placeholder="Your Current Password"
+								/>
+								<input
+									type="password"
+									ref={newPasswordRef}
+									autoComplete="new-password"
+									className="p-2 bg-neutral-700 rounded-sm"
+									placeholder="Your New Password"
+								/>
+							</div>
+						)}
 					</div>
 
 					<button
 						onClick={() => {
-							saveProfileChanges()
+							changePasswordButtonClick()
 						}}
 						className="mt-4 rounded-sm bg-green-500 text-white p-2 w-full"
 					>
