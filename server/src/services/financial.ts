@@ -163,10 +163,7 @@ class FinancialService {
 			return null
 		}
 	}
-	public async getExpenses(
-		userID: string,
-		count?: number 
-	) {
+	public async getExpenses(userID: string, count?: number) {
 		try {
 			let expenses: Expense[]
 			if (count) {
@@ -190,54 +187,148 @@ class FinancialService {
 		}
 	}
 	public async getExpense(expenseID: string) {
-        try {
-            const expense = await prisma.expense.findUnique({
-                where: {
-                    id: expenseID
-                }
-            })
-            return expense
-        } catch (error) {
-            Logger.error(error as string)
-            return null
-        }
-    }
+		try {
+			const expense = await prisma.expense.findUnique({
+				where: {
+					id: expenseID,
+				},
+			})
+			return expense
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
 	public async updateExpense(
-        expenseID: string,
-        userID: string,
-        amount: number,
-        category: string,
-        description: string,
-        date: Date,
-        tags: string[]
-    ) {
-        try {
-            const expense = await prisma.expense.update({
-                where: {
-                    id: expenseID
-                },
-                data: {
-                    userId: userID,
-                    amount: amount,
-                    category: category,
-                    description: description,
-                    date: date,
-                    tags: tags
-                }
-            })
-            return expense
-        } catch (error) {
-            Logger.error(error as string)
-            return null
-        }
-    }
+		expenseID: string,
+		userID: string,
+		amount: number,
+		category: string,
+		description: string,
+		date: Date,
+		tags: string[]
+	) {
+		try {
+			const expense = await prisma.expense.update({
+				where: {
+					id: expenseID,
+				},
+				data: {
+					userId: userID,
+					amount: amount,
+					category: category,
+					description: description,
+					date: date,
+					tags: tags,
+				},
+			})
+			return expense
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
 
 	// Incomes
-	public async createIncome() {}
-	public async deleteIncome() {}
-	public async getIncomes() {}
-	public async getIncome() {}
-	public async updateIncome() {}
+	public async createIncome(
+		userID: string,
+		amount: number,
+		source: string,
+		date: Date,
+		description: string
+	) {
+		try {
+			const income = await prisma.income.create({
+				data: {
+					userId: userID,
+					amount: amount,
+					source: source,
+					date: date,
+					description: description,
+				},
+			})
+			return income
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async deleteIncome(incomeID: string) {
+		try {
+			const income = await prisma.income.delete({
+				where: {
+					id: incomeID,
+				},
+			})
+			return income
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async getIncomes(userID: string, count?: number) {
+		try {
+			let incomes: Income[]
+			if (count) {
+				incomes = await prisma.income.findMany({
+					where: {
+						userId: userID,
+					},
+					take: count,
+				})
+			} else {
+				incomes = await prisma.income.findMany({
+					where: {
+						userId: userID,
+					},
+				})
+			}
+			return incomes
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async getIncome(incomeID: string) {
+		try {
+			const income = await prisma.income.findUnique({
+				where: {
+					id: incomeID,
+				},
+			})
+			return income
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async updateIncome(
+		incomeID: string,
+		userID: string,
+		amount: number,
+		source: string,
+		date: Date,
+		description: string
+	) {
+		try {
+			const income = await prisma.income.update({
+				where: {
+					id: incomeID,
+				},
+				data: {
+					userId: userID,
+					amount: amount,
+					source: source,
+					date: date,
+					description: description,
+				},
+			})
+			return income
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
 }
 
 export default FinancialService.getInstance()
