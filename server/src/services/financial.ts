@@ -46,54 +46,54 @@ class FinancialService {
 		}
 	}
 	public async deleteTransaction(transactionID: string) {
-        try {
-            const transaction = await prisma.transaction.delete({
-                where: {
-                    id: transactionID
-                }
-            })
-            return transaction
-        } catch (error) {
-            Logger.error(error as string)
-            return null
-        }
-    }
-	public async getTransactions(userID: string, amount?: number) {
-        try {
-            let transactions: Transaction[]
-            if (amount) {
-                transactions = await prisma.transaction.findMany({
-                    where: {
-                        userId: userID,
-                        amount: amount
-                    }
-                })
-            } else {
-                transactions = await prisma.transaction.findMany({
-                    where: {
-                        userId: userID
-                    }
-                })
-            }
-            return transactions
-        } catch (error) {
-            Logger.error(error as string)
-            return null
-        }
-    }
+		try {
+			const transaction = await prisma.transaction.delete({
+				where: {
+					id: transactionID,
+				},
+			})
+			return transaction
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async getTransactions(userID: string, count?: number) {
+		try {
+			let transactions: Transaction[]
+			if (count) {
+				transactions = await prisma.transaction.findMany({
+					where: {
+						userId: userID,
+					},
+					take: count,
+				})
+			} else {
+				transactions = await prisma.transaction.findMany({
+					where: {
+						userId: userID,
+					},
+				})
+			}
+			return transactions
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
 	public async getTransaction(transactionID: string) {
-        try {
-            const transaction = await prisma.transaction.findUnique({
-                where: {
-                    id: transactionID
-                }
-            })
-            return transaction
-        } catch (error) {
-            Logger.error(error as string)
-            return null
-        }
-    }
+		try {
+			const transaction = await prisma.transaction.findUnique({
+				where: {
+					id: transactionID,
+				},
+			})
+			return transaction
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
 	public async updateTransaction(
 		transactionID: string,
 		userID: string,
@@ -103,10 +103,118 @@ class FinancialService {
 		date: Date,
 		tags: string[]
 	) {
+		try {
+			const transaction = await prisma.transaction.update({
+				where: {
+					id: transactionID,
+				},
+				data: {
+					userId: userID,
+					amount: amount,
+					category: category,
+					description: description,
+					date: date,
+					tags: tags,
+				},
+			})
+			return transaction
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+
+	// Expenses
+	public async createExpense(
+		userID: string,
+		amount: number,
+		category: string,
+		description: string,
+		date: Date,
+		tags: string[]
+	) {
+		try {
+			const expense = await prisma.expense.create({
+				data: {
+					userId: userID,
+					amount: amount,
+					category: category,
+					description: description,
+					date: date,
+					tags: tags,
+				},
+			})
+			return expense
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async deleteExpense(expenseID: string) {
+		try {
+			const expense = await prisma.expense.delete({
+				where: {
+					id: expenseID,
+				},
+			})
+			return expense
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async getExpenses(
+		userID: string,
+		count?: number 
+	) {
+		try {
+			let expenses: Expense[]
+			if (count) {
+				expenses = await prisma.expense.findMany({
+					where: {
+						userId: userID,
+					},
+					take: count,
+				})
+			} else {
+				expenses = await prisma.expense.findMany({
+					where: {
+						userId: userID,
+					},
+				})
+			}
+			return expenses
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async getExpense(expenseID: string) {
         try {
-            const transaction = await prisma.transaction.update({
+            const expense = await prisma.expense.findUnique({
                 where: {
-                    id: transactionID
+                    id: expenseID
+                }
+            })
+            return expense
+        } catch (error) {
+            Logger.error(error as string)
+            return null
+        }
+    }
+	public async updateExpense(
+        expenseID: string,
+        userID: string,
+        amount: number,
+        category: string,
+        description: string,
+        date: Date,
+        tags: string[]
+    ) {
+        try {
+            const expense = await prisma.expense.update({
+                where: {
+                    id: expenseID
                 },
                 data: {
                     userId: userID,
@@ -117,19 +225,12 @@ class FinancialService {
                     tags: tags
                 }
             })
-            return transaction
+            return expense
         } catch (error) {
             Logger.error(error as string)
             return null
         }
     }
-
-	// Expenses
-	public async createExpense() {}
-	public async deleteExpense() {}
-	public async getExpenses() {}
-	public async getExpense() {}
-	public async updateExpense() {}
 
 	// Incomes
 	public async createIncome() {}
