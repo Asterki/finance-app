@@ -3,11 +3,11 @@ import EmailService from '../../services/email'
 
 import { NextFunction, Request, Response } from 'express'
 import {
-	ResetPasswordResponseData as ResponseData,
-	ResetPasswordRequestBody as RequestBody,
+	GenerateRecoveryCodeResponseData as ResponseData,
+	GenerateRecoveryCodeRequestBody as RequestBody,
 } from '../../../../shared/api/preferences'
 
-const generateRecoveryCode = async (
+const generateRecoveryCodeHandler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
 	next: NextFunction
@@ -45,4 +45,4 @@ const generateRecoveryCode = async (
 	}
 }
 
-export default generateRecoveryCode
+export default generateRecoveryCodeHandler

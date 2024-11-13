@@ -145,17 +145,20 @@ class PreferencesService {
 	}
 
 	public async recoverPassword(
-		userID: string,
 		resetToken: string,
 		newPassword: string
-	) {
+	): Promise<{ status: 'success' | 'internal-error' | 'invalid-reset-token' }> {
 		try {
 			const user = await prisma.user.findFirst({
 				where: {
-					id: userID,
-				},
+					security: {
+						resetToken,
+					},
+				}
 			})
-			if (!user) return
+			if (!user) return {
+				status: 'invalid-reset-token',
+			}
 
 			await prisma.security.update({
 				where: {

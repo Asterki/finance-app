@@ -45,10 +45,19 @@ export interface ChangePasswordResponseData {
 	status: 'success' | 'internal-error' | 'invalid-password'
 }
 
-export interface ResetPasswordRequestBody {
+export interface GenerateRecoveryCodeRequestBody {
 	email: string
 }
 
-export interface ResetPasswordResponseData {
+export interface GenerateRecoveryCodeResponseData {
 	status: 'success' | 'internal-error' | 'user-not-found'
+}
+
+export interface ResetPasswordRequestBody {
+	resetToken: string
+	newPassword: string
+}
+
+export interface ResetPasswordResponseData {
+	status: 'success' | 'internal-error' | 'invalid-reset-token'
 }

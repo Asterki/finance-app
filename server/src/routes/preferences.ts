@@ -15,6 +15,7 @@ import preferencesUpdate from '../controllers/preferences/update'
 import preferencesFetch from '../controllers/preferences/fetch'
 import preferencesChangePassword from '../controllers/preferences/changePassword'
 import generateRecoveryCode from '../controllers/preferences/generateRecoveryCode'
+import resetPassword from '../controllers/preferences/resetPassword'
 
 const router = express.Router()
 
@@ -76,6 +77,17 @@ router.post(
 	'/generateRecoveryCode',
 	validateRequestBody(generateRecoveryCodeSchema),
 	generateRecoveryCode
+)
+
+// Reset password
+const resetPasswordSchema = z.object({
+	resetToken: z.string().min(10),
+	newPassword: z.string().min(6).max(256),
+})
+router.post(
+	'/resetPassword',
+	validateRequestBody(resetPasswordSchema),
+	resetPassword
 )
 
 export default router
