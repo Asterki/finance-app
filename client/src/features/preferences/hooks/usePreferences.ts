@@ -1,14 +1,15 @@
 import * as React from 'react'
 
 import preferencesApi from '../services/preferencesApi'
+import { setPreferences } from '../slices/preferences'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../../store'
 
 const usePreferences = () => {
-	const [preferences, setPreferences] = React.useState({
-		currency: 'USD',
-		language: 'en',
-		theme: 'light',
-		timezone: 'UTC',
-	})
+	const dispatch = useDispatch()
+	const currentPreferences = useSelector(
+		(state: RootState) => state.preferences.currentPreferences
+	)
 
 	const updateProfile = async (newPreferences: {
 		currency: string
@@ -23,13 +24,13 @@ const usePreferences = () => {
 		;(async () => {
 			const response = await preferencesApi.fetchPreferences()
 			if (response.status === 'success') {
-				setPreferences(response.preferences)
+				dispatch(setPreferences(response.preferences))
 			}
 		})()
 	}, [])
 
 	return {
-		preferences,
+		preferences: currentPreferences,
 		updateProfile,
 	}
 }

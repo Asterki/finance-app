@@ -127,14 +127,18 @@ class PreferencesService {
 			},
 			select: {
 				preferences: true,
+				security: true,
 			},
 		})
 
-		if (!user) {
+		if (!user || !user.security || !user.preferences) {
 			return null
 		}
 
-		return user.preferences
+		return {
+			preferences: user.preferences,
+			security: user.security,
+		}
 	}
 }
 

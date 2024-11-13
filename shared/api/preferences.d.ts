@@ -1,4 +1,4 @@
-import { UserPreferences } from '../models'
+import { UserPreferences, Security } from '../models'
 
 export interface EnableTFARequestBody {
 	code: string
@@ -30,5 +30,8 @@ export interface UpdateProfileResponseData {
 
 export interface FetchPreferencesResponseData {
 	status: 'success' | 'internal-error' | 'unauthenticated'
-	preferences?: UserPreferences
+	preferences?: {
+		preferences: UserPreferences
+		security: Security
+	}
 }

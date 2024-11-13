@@ -4,6 +4,9 @@ import { createBrowserRouter } from 'react-router-dom'
 import Landing from './main/landing'
 import Home from './main/home'
 
+// Preferences
+import Preferences from './preferences'
+
 // Accounts
 import AccountLogin from './accounts/login'
 import AccountRegister from './accounts/register'
@@ -21,6 +24,12 @@ const router = createBrowserRouter([
 	{
 		path: '/home',
 		element: <Home />,
+	},
+
+	// Preferences
+	{
+		path: '/preferences',
+		element: <Preferences />,
 	},
 
 	// Accounts
