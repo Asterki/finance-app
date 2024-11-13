@@ -24,7 +24,10 @@ const usePreferences = () => {
 		;(async () => {
 			const response = await preferencesApi.fetchPreferences()
 			if (response.status === 'success') {
-				dispatch(setPreferences(response.preferences))
+				dispatch(setPreferences({
+					security: response.preferences!.security,
+					user: response.preferences!.preferences,
+				}))
 			}
 		})()
 	}, [])

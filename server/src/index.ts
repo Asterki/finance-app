@@ -14,17 +14,6 @@ import Logger from './utils/logger'
 
 import 'dotenv/config'
 
-import accounts from './services/accounts'
-
-accounts.registerUser(
-	'Fernando Rivera',
-	'asterki.dev@proton.me',
-	'password',
-	'USD',
-	'en',
-	'America/New_York'
-)
-
 class Server {
 	private static instance: Server | null = null
 
@@ -90,7 +79,7 @@ class Server {
 			// TODO: Add CORS configuration
 			this.app.use(
 				cors({
-					origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+					origin: "http://localhost:5173",
 					credentials: true,
 					exposedHeaders: ['set-cookie'],
 				})
