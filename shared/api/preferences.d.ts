@@ -35,3 +35,12 @@ export interface FetchPreferencesResponseData {
 		security: Security
 	}
 }
+
+export interface ChangePasswordRequestBody {
+	oldPassword: string;
+	newPassword: string;
+}
+
+export interface ChangePasswordResponseData {
+
+}

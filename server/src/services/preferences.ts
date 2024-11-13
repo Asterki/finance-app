@@ -189,15 +189,15 @@ class PreferencesService {
 		userID: string,
 		oldPassword: string,
 		newPassword: string
-	) {
+	): Promise<{ status: 'success' | 'invalid-password' }> {
 		const user = await prisma.user.findFirst({
 			where: {
 				id: userID,
 			},
 		})
-		if (!user) return
-
-		if (!bcrypt.compareSync(oldPassword, user.passwordHash)) return
+		if (!user) return { status: 'invalid-password' } // Although this should never happen
+		if (!bcrypt.compareSync(oldPassword, user.passwordHash))
+			return { status: 'invalid-password' }
 
 		await prisma.user.update({
 			where: {
