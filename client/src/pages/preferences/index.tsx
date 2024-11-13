@@ -1,7 +1,6 @@
 import * as React from 'react'
 import QRCode from 'qrcode'
 import { allTimezones } from 'react-timezone-select'
-import speakeasy from 'speakeasy'
 import * as Select from '@radix-ui/react-select'
 
 import { FaCheck, FaChevronCircleDown, FaChevronCircleUp } from 'react-icons/fa'
@@ -15,15 +14,23 @@ import PageLayout from '../../layouts/PageLayout'
 
 const PreferencesPage = () => {
 	const { notification, showNotification } = useNotification()
-	const { user, authStatus } = useAuth()
-	const { preferences, updateProfile } = usePreferences()
+	const { user } = useAuth()
+	const {
+		preferences,
+		updateProfile,
+		generateTFASecret,
+		enableTFA,
+		fetchPreferences,
+		disableTFA,
+	} = usePreferences()
+
+	const tfaInputRef = React.useRef<HTMLInputElement>(null)
 
 	const [currentPreferences, setCurrentPreferences] =
 		React.useState(preferences)
 
 	const [qrCode, setQrCode] = React.useState('')
 	const [secret, setSecret] = React.useState('')
-	const [tfaCode, setTfaCode] = React.useState('')
 
 	React.useEffect(() => {
 		if (preferences && user) return setCurrentPreferences(preferences)
@@ -44,18 +51,53 @@ const PreferencesPage = () => {
 		}
 	}
 
-	const generateTFASecret = async () => {
-		const secret = speakeasy.generateSecret({
-			length: 20,
-		}).base32
+	const generateTFASecretButton = async () => {
+		if (!user) return
+
+		const secret = (await generateTFASecret()).secret!
 		setSecret(secret)
 		setQrCode(
-			speakeasy.otpauthURL({
-				secret: secret,
-				label: 'Finance App',
-				issuer: 'Finance App',
-			})
+			await QRCode.toDataURL(
+				`otpauth://totp/MyApp:${
+					user!.email
+				}?secret=${secret}&issuer=MyApp`
+			)
 		)
+	}
+
+	const enableTFAButton = async () => {
+		if (!user || !tfaInputRef.current) return
+
+		const response = await enableTFA(tfaInputRef.current.value, secret)
+
+		if (response.status === 'success') {
+			showNotification('Success', 'TFA Enabled', 'success')
+			setSecret('')
+			setQrCode('')
+			// We don't worry about updating the preferences state since the backend already does this for us
+			// But we will re-fetch the preferences to get the updated state
+			fetchPreferences()
+		} else if (response.status === 'invalid-code') {
+			showNotification('Error', 'Invalid TFA Code, Try Again', 'error')
+		} else {
+			showNotification('Error', 'Failed to Enable TFA', 'error')
+		}
+	}
+
+	const disableTFAButton = async () => {
+		if (!user) return
+
+		const password = prompt('Enter your password to disable TFA')
+		if (!password) return
+
+		const response = await disableTFA(password)
+
+		if (response.status == 'success') {
+			showNotification("Success", "TFA has been disabled for your account", "success")
+			fetchPreferences()
+		} else if (response.status == 'invalid-password') {
+			showNotification('Error', 'Invalid Password', 'error')
+		}
 	}
 
 	return (
@@ -65,8 +107,8 @@ const PreferencesPage = () => {
 			className="dark:bg-neutral-600 dark:text-neutral-100"
 		>
 			<section className="min-h-screen flex">
-				<div className="text-2xl border-2 rounded-sm border-neutral-400 p-4">
-					<h1 className="">General Settings</h1>
+				<div className="border-2 rounded-sm border-neutral-400 p-4">
+					<h1 className="text-2xl">General Settings</h1>
 
 					<div className="mt-2">
 						<h2 className="text-xl">App Language</h2>
@@ -228,18 +270,42 @@ const PreferencesPage = () => {
 					</button>
 				</div>
 
-				<div className="text-2xl border-2 rounded-sm border-neutral-400 p-4">
-					<h1 className="">Security Settings</h1>
+				<div className="border-2 rounded-sm border-neutral-400 p-4">
+					<h1 className="text-2xl">Security Settings</h1>
 
 					<div className="mt-2">
 						<h2 className="text-xl">Two Factor Authentication</h2>
-						{qrCode && <img src={qrCode} alt="" />}
+						{qrCode && (
+							<div className="flex items-center gap-2 flex-col">
+								<p>
+									Scan the QR Code with your Authenticator App
+								</p>
+								<img src={qrCode} alt="" />
+								<input
+									type="text"
+									name=""
+									id=""
+									className="p-2 bg-neutral-700 rounded-sm"
+									placeholder="Enter TFA Code"
+									ref={tfaInputRef}
+								/>
+								<button
+									onClick={() => {
+										enableTFAButton()
+									}}
+									className="rounded-sm bg-green-500 text-white p-2 w-full"
+								>
+									Verify
+								</button>
+							</div>
+						)}
 
 						{currentPreferences &&
+							!qrCode &&
 							!currentPreferences.security.twoFactorEnabled && (
 								<button
 									onClick={() => {
-										generateTFASecret()
+										generateTFASecretButton()
 									}}
 									className="rounded-sm bg-green-500 text-white p-2 w-full"
 								>
@@ -250,7 +316,7 @@ const PreferencesPage = () => {
 							currentPreferences.security.twoFactorEnabled && (
 								<button
 									onClick={() => {
-										saveProfileChanges()
+										disableTFAButton()
 									}}
 									className="rounded-sm bg-red-500 text-white p-2 w-full"
 								>

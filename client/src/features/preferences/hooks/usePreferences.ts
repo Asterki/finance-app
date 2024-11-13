@@ -24,22 +24,40 @@ const usePreferences = () => {
 		return await preferencesApi.generateTFASecret()
 	}
 
-	React.useEffect(() => {
-		;(async () => {
-			const response = await preferencesApi.fetchPreferences()
-			if (response.status === 'success') {
-				dispatch(setPreferences({
+	const enableTFA = async (code: string, secret: string) => {
+		return await preferencesApi.enableTFA(code, secret)
+	}
+
+	const disableTFA = async (password: string) => {
+		return await preferencesApi.disableTFA(password)
+	}
+
+	const fetchPreferences = async () => {
+		const response = await preferencesApi.fetchPreferences()
+		if (response.status === 'success') {
+			dispatch(
+				setPreferences({
 					security: response.preferences!.security,
 					user: response.preferences!.preferences,
-				}))
-			}
+				})
+			)
+		}
+	}
+
+	React.useEffect(() => {
+		;(async () => {
+			await fetchPreferences()
 		})()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	return {
 		preferences: currentPreferences,
 		updateProfile,
-		generateTFASecret
+		generateTFASecret,
+		enableTFA,
+		fetchPreferences,
+		disableTFA,
 	}
 }
 
