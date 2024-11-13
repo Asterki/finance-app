@@ -37,10 +37,18 @@ export interface FetchPreferencesResponseData {
 }
 
 export interface ChangePasswordRequestBody {
-	oldPassword: string;
-	newPassword: string;
+	oldPassword: string
+	newPassword: string
 }
 
 export interface ChangePasswordResponseData {
+	status: 'success' | 'internal-error' | 'invalid-password'
+}
 
+export interface ResetPasswordRequestBody {
+	email: string
+}
+
+export interface ResetPasswordResponseData {
+	status: 'success' | 'internal-error' | 'user-not-found'
 }

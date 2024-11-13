@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Logger from '../utils/logger'
 
 import prismaSingleton from '../config/prisma'
+import { User } from '@prisma/client'
 const prisma = prismaSingleton.getClient()
 
 class PreferencesService {
@@ -213,12 +214,15 @@ class PreferencesService {
 		}
 	}
 
-	public async generateRecoveryCode(email: string) {
+	public async generateRecoveryCode(email: string): Promise<{ status: 'user-not-found' | 'success' | 'internal-error', recoveryCode?: string, user?: User }> {
 		try {
 			const user = await prisma.user.findFirst({
 				where: {
 					email,
 				},
+				include: {
+					preferences: true,
+				}
 			})
 			if (!user) return { status: 'user-not-found' }
 
@@ -235,6 +239,7 @@ class PreferencesService {
 			return {
 				status: 'success',
 				recoveryCode: resetToken,
+				user: user,
 			}
 		} catch (error) {
 			Logger.error((error as Error).message, true)

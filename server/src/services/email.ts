@@ -61,7 +61,6 @@ class MailerService {
 	public async sendMail(
 		to: string,
 		subject: string,
-		lang: string,
 		html: string
 	) {
 		return this.transporter.sendMail({

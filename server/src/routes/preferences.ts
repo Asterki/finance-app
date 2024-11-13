@@ -14,6 +14,7 @@ import preferencesDisableTFA from '../controllers/preferences/disableTFA'
 import preferencesUpdate from '../controllers/preferences/update'
 import preferencesFetch from '../controllers/preferences/fetch'
 import preferencesChangePassword from '../controllers/preferences/changePassword'
+import generateRecoveryCode from '../controllers/preferences/generateRecoveryCode'
 
 const router = express.Router()
 
@@ -58,13 +59,23 @@ router.get('/fetch', ensureAuthenticated, preferencesFetch)
 // Change Password
 const changePasswordSchema = z.object({
 	oldPassword: z.string().min(6).max(256),
-	newPassword: z.string().min(6).max(256)
+	newPassword: z.string().min(6).max(256),
 })
 router.post(
 	'/changePassword',
 	ensureAuthenticated,
 	validateRequestBody(changePasswordSchema),
 	preferencesChangePassword
+)
+
+// Generate recovery code
+const generateRecoveryCodeSchema = z.object({
+	email: z.string().email(),
+})
+router.post(
+	'/generateRecoveryCode',
+	validateRequestBody(generateRecoveryCodeSchema),
+	generateRecoveryCode
 )
 
 export default router
