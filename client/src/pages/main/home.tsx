@@ -11,9 +11,9 @@ const LandingPage = () => {
 		<PageLayout
 			requiresLogin={true}
 			notification={notification}
-			className="dark:bg-neutral-600 dark:text-neutral-100"
+			className={user && user.preferences.theme == 'dark' ? 'dark' : ''}
 		>
-			<section className="min-h-screen flex">
+			<section className="min-h-screen flex md:flex-row flex-col dark:bg-neutral-600 dark:text-neutral-100 text-neutral-700">
 				<div className="md:w-1/2 w-full flex flex-col items-center justify-center bg-black/20 backdrop-blur-md p-4">
 					<h1 className="text-2xl">
 						Good{' '}

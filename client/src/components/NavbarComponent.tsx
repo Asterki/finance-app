@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { User } from '../../../shared/models';
 
-import { FaCog, FaDoorOpen, FaChevronCircleDown } from 'react-icons/fa';
+import { FaCog, FaDoorOpen, FaChevronCircleDown, FaHome } from 'react-icons/fa';
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
@@ -65,6 +65,13 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                       <Link to='/preferences' className='flex gap-2 items-center'>
                         <FaCog />
                         Preferences
+                      </Link>
+                    </DropdownMenu.Item>
+
+                    <DropdownMenu.Item className='p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full'>
+                      <Link to='/home' className='flex gap-2 items-center'>
+                        <FaHome />
+                        Home
                       </Link>
                     </DropdownMenu.Item>
 

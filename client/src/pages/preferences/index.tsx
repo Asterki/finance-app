@@ -48,6 +48,8 @@ const PreferencesPage = () => {
 					'Profile Updated Successfully',
 					'success'
 				)
+
+				fetchPreferences()
 			} else {
 				showNotification('Error', 'Failed to Update Profile', 'error')
 			}
@@ -141,10 +143,10 @@ const PreferencesPage = () => {
 		<PageLayout
 			requiresLogin={true}
 			notification={notification}
-			className="dark:bg-neutral-600 dark:text-neutral-100"
+			className={user && user.preferences.theme == 'dark' ? 'dark' : ''}
 		>
-			<section className="min-h-screen flex">
-				<div className="border-2 rounded-sm border-neutral-400 p-4">
+			<section className="min-h-screen flex md:flex-row flex-col dark:bg-neutral-600 dark:text-neutral-100 text-neutral-700">
+				<div className="md:border-r-2 border-b-2 dark:border-neutral-400 border-neutral-200 p-4 md:w-1/2 w-full">
 					<h1 className="text-2xl">General Settings</h1>
 
 					<div className="mt-2">
@@ -162,13 +164,13 @@ const PreferencesPage = () => {
 								}}
 								defaultValue={currentPreferences.user.language}
 							>
-								<Select.Trigger className="w-full bg-neutral-700 rounded-sm p-2 flex items-center justify-start gap-2">
+								<Select.Trigger className="w-full dark:bg-neutral-700 bg-neutral-200 rounded-sm p-2 flex items-center justify-start gap-2">
 									<FaChevronCircleDown />
 									{currentPreferences.user.language === 'en'
 										? 'English'
 										: 'Spanish'}
 								</Select.Trigger>
-								<Select.Content className="bg-neutral-700 rounded-sm *:p-2 *:outline-none *:transition-all *:cursor-pointer *:bg-neutral-700">
+								<Select.Content className="dark:bg-neutral-700 bg-neutral-200 rounded-sm *:p-2 *:outline-none *:transition-all *:cursor-pointer *:dark:bg-neutral-700 *:bg-neutral-200">
 									<Select.Item
 										className="hover:brightness-110 flex gap-2 items-center"
 										value="en"
@@ -207,11 +209,11 @@ const PreferencesPage = () => {
 								}}
 								defaultValue={currentPreferences.user.timezone}
 							>
-								<Select.Trigger className="w-full bg-neutral-700 rounded-sm p-2 flex items-center justify-start gap-2">
+								<Select.Trigger className="w-full dark:bg-neutral-700 bg-neutral-200 rounded-sm p-2 flex items-center justify-start gap-2">
 									<FaChevronCircleDown />
 									{currentPreferences.user.timezone}
 								</Select.Trigger>
-								<Select.Content className="overflow-hidden bg-neutral-700 rounded-sm *:p-2 *:outline-none *:transition-all *:cursor-pointer *:bg-neutral-700">
+								<Select.Content className="dark:bg-neutral-700 bg-neutral-200 rounded-sm *:p-2 *:outline-none *:transition-all *:cursor-pointer *:dark:bg-neutral-700 *:bg-neutral-200">
 									<Select.ScrollUpButton className="text-2xl text-red-400 flex h-[25px] cursor-default items-center justify-center bg-white text-violet11">
 										<FaChevronCircleDown />
 									</Select.ScrollUpButton>
@@ -253,13 +255,13 @@ const PreferencesPage = () => {
 								}}
 								defaultValue={currentPreferences.user.theme}
 							>
-								<Select.Trigger className="w-full bg-neutral-700 rounded-sm p-2 flex items-center justify-start gap-2">
+								<Select.Trigger className="w-full dark:bg-neutral-700 bg-neutral-200 rounded-sm p-2 flex items-center justify-start gap-2">
 									<FaChevronCircleDown />
 									{currentPreferences.user.theme === 'dark'
 										? 'Dark'
 										: 'Light'}
 								</Select.Trigger>
-								<Select.Content className="bg-neutral-700 rounded-sm *:p-2 *:outline-none *:transition-all *:cursor-pointer *:bg-neutral-700">
+								<Select.Content className="dark:bg-neutral-700 bg-neutral-200 rounded-sm *:p-2 *:outline-none *:transition-all *:cursor-pointer *:dark:bg-neutral-700 *:bg-neutral-200">
 									<Select.Item
 										className="hover:brightness-110 flex gap-2 items-center"
 										value="dark"
@@ -283,12 +285,13 @@ const PreferencesPage = () => {
 						)}
 					</div>
 
-					<div className="mt-2">
+					<div className="mt-2 w-full">
 						<h2 className="text-xl">Currency</h2>
 						{currentPreferences && (
 							<input
 								type="text"
-								className="p-2 bg-neutral-700 rounded-sm"
+								autoComplete="off"
+								className="p-2 dark:bg-neutral-700 bg-neutral-200 rounded-sm w-full"
 								placeholder="Your Currency"
 								defaultValue={currentPreferences.user.currency}
 							/>
@@ -305,7 +308,7 @@ const PreferencesPage = () => {
 					</button>
 				</div>
 
-				<div className="border-2 rounded-sm border-neutral-400 p-4">
+				<div className="border-neutral-400 p-4 md:w-1/2 w-full">
 					<h1 className="text-2xl">Security Settings</h1>
 
 					<div className="mt-2">
@@ -320,7 +323,7 @@ const PreferencesPage = () => {
 									type="text"
 									name=""
 									id=""
-									className="p-2 bg-neutral-700 rounded-sm"
+									className="p-2 dark:bg-neutral-700 bg-neutral-200 rounded-sm w-full"
 									placeholder="Enter TFA Code"
 									ref={tfaInputRef}
 								/>
@@ -368,14 +371,14 @@ const PreferencesPage = () => {
 									type="password"
 									ref={oldPasswordRef}
 									autoComplete="new-password"
-									className="p-2 bg-neutral-700 rounded-sm"
+									className="p-2 dark:bg-neutral-700 bg-neutral-200 rounded-sm w-full"
 									placeholder="Your Current Password"
 								/>
 								<input
 									type="password"
 									ref={newPasswordRef}
 									autoComplete="new-password"
-									className="p-2 bg-neutral-700 rounded-sm"
+									className="p-2 dark:bg-neutral-700 bg-neutral-200 rounded-sm w-full"
 									placeholder="Your New Password"
 								/>
 							</div>

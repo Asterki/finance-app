@@ -21,12 +21,12 @@ const LogoutComponent: React.FC = () => {
 		>
 			<div className="flex flex-col items-center gap-2">
 				<img src="/icon.svg" className="w-8" />
-				<h1 className="text-xl font-semibold mb-2 dark:text-white">
+				<h1 className="text-xl font-semibold mb-2 dark:text-white text-neutral-700">
 					Finance App
 				</h1>
 			</div>
 
-			<p className="text-center text-white">
+			<p className="text-center dark:text-white text-neutral-700">
 				Click the button below to logout of your account.
 			</p>
 
