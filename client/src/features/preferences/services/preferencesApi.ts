@@ -1,16 +1,18 @@
 import axios from 'axios'
 import handleResponseError from '../../../utils/handleResponseError'
 
+import * as Types from '../../../../../shared/api/preferences'
+
 const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/preferences`
 
 const enableTFA = async (code: string, secret: string) => {
 	try {
-		const response = await axios.post(
+		const response = await axios.post<Types.EnableTFAResponseData>(
 			`${apiEndpoint}/enableTFA`,
 			{
 				code,
 				secret,
-			},
+			} as Types.EnableTFARequestBody,
 			{
 				withCredentials: true,
 			}
@@ -34,7 +36,7 @@ const enableTFA = async (code: string, secret: string) => {
 
 const disableTFA = async (password: string) => {
 	try {
-		const response = await axios.post(
+		const response = await axios.post<Types.DisableTFAResponseData>(
 			`${apiEndpoint}/disableTFA`,
 			{
 				password,
@@ -67,7 +69,7 @@ const updateProfile = async (profile: {
 	timezone: string
 }) => {
 	try {
-		const response = await axios.post(`${apiEndpoint}/update`, profile, {
+		const response = await axios.post<Types.UpdateProfileResponseData>(`${apiEndpoint}/update`, profile, {
 			withCredentials: true,
 		})
 
@@ -89,7 +91,7 @@ const updateProfile = async (profile: {
 
 const fetchPreferences = async () => {
 	try {
-		const response = await axios.get(`${apiEndpoint}/fetch`, {
+		const response = await axios.get<Types.FetchPreferencesResponseData>(`${apiEndpoint}/fetch`, {
 			withCredentials: true,
 		})
 
@@ -110,9 +112,67 @@ const fetchPreferences = async () => {
 	}
 }
 
+const changePassword = async (oldPassword: string, newPassword: string) => {
+	try {
+		const response = await axios.post<Types.ChangePasswordResponseData>(
+			`${apiEndpoint}/changePassword`,
+			{
+				oldPassword,
+				newPassword,
+			},
+			{
+				withCredentials: true,
+			}
+		)
+
+		return {
+			status: response.data.status,
+		}
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				status: handleResponseError(error),
+			}
+		} else {
+			return {
+				status: 'unknown-error',
+			}
+		}
+	}
+}
+
+const generateRecoveryCode = async (email: string) => {
+	try {
+		const response = await axios.post<Types.GenerateRecoveryCodeResponseData>(
+			`${apiEndpoint}/generateRecoveryCode`,
+			{ email },
+			{
+				withCredentials: true,
+			}
+		)
+
+		return {
+			status: response.data.status,
+			recoveryCode: response.data,
+		}
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				status: handleResponseError(error),
+			}
+		} else {
+			return {
+				status: 'unknown-error',
+			}
+		}
+	}
+}
+
 export default {
 	enableTFA,
 	disableTFA,
 	updateProfile,
-	fetchPreferences
+	fetchPreferences,
+	changePassword,
+	generateRecoveryCode,
 }
