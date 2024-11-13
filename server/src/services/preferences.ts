@@ -1,4 +1,6 @@
 import speakeasy from 'speakeasy'
+import bcrypt from 'bcrypt'
+import { v4 as uuidv4 } from 'uuid'
 
 import Logger from '../utils/logger'
 
@@ -138,6 +140,107 @@ class PreferencesService {
 		return {
 			preferences: user.preferences,
 			security: user.security,
+		}
+	}
+
+	public async recoverPassword(
+		userID: string,
+		resetToken: string,
+		newPassword: string
+	) {
+		try {
+			const user = await prisma.user.findFirst({
+				where: {
+					id: userID,
+				},
+			})
+			if (!user) return
+
+			await prisma.security.update({
+				where: {
+					userId: user.id,
+				},
+				data: {
+					resetToken: null,
+				},
+			})
+
+			await prisma.user.update({
+				where: {
+					id: user.id,
+				},
+				data: {
+					passwordHash: bcrypt.hashSync(newPassword, 10),
+				},
+			})
+
+			return {
+				status: 'success',
+			}
+		} catch (error) {
+			Logger.error((error as Error).message, true)
+			return {
+				status: 'internal-error',
+			}
+		}
+	}
+
+	public async changePassword(
+		userID: string,
+		oldPassword: string,
+		newPassword: string
+	) {
+		const user = await prisma.user.findFirst({
+			where: {
+				id: userID,
+			},
+		})
+		if (!user) return
+
+		if (!bcrypt.compareSync(oldPassword, user.passwordHash)) return
+
+		await prisma.user.update({
+			where: {
+				id: user.id,
+			},
+			data: {
+				passwordHash: bcrypt.hashSync(newPassword, 10),
+			},
+		})
+
+		return {
+			status: 'success',
+		}
+	}
+
+	public async generateRecoveryCode(email: string) {
+		try {
+			const user = await prisma.user.findFirst({
+				where: {
+					email,
+				},
+			})
+			if (!user) return { status: 'user-not-found' }
+
+			const resetToken = uuidv4()
+			await prisma.security.update({
+				where: {
+					userId: user.id,
+				},
+				data: {
+					resetToken,
+				},
+			})
+
+			return {
+				status: 'success',
+				recoveryCode: resetToken,
+			}
+		} catch (error) {
+			Logger.error((error as Error).message, true)
+			return {
+				status: 'internal-error',
+			}
 		}
 	}
 }
