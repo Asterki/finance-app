@@ -45,9 +45,55 @@ class FinancialService {
 			return null
 		}
 	}
-	public async deleteTransaction(transactionID: string) {}
-	public async getTransactions(userID: string, amount?: number) {}
-	public async getTransaction(transactionID: string) {}
+	public async deleteTransaction(transactionID: string) {
+        try {
+            const transaction = await prisma.transaction.delete({
+                where: {
+                    id: transactionID
+                }
+            })
+            return transaction
+        } catch (error) {
+            Logger.error(error as string)
+            return null
+        }
+    }
+	public async getTransactions(userID: string, amount?: number) {
+        try {
+            let transactions: Transaction[]
+            if (amount) {
+                transactions = await prisma.transaction.findMany({
+                    where: {
+                        userId: userID,
+                        amount: amount
+                    }
+                })
+            } else {
+                transactions = await prisma.transaction.findMany({
+                    where: {
+                        userId: userID
+                    }
+                })
+            }
+            return transactions
+        } catch (error) {
+            Logger.error(error as string)
+            return null
+        }
+    }
+	public async getTransaction(transactionID: string) {
+        try {
+            const transaction = await prisma.transaction.findUnique({
+                where: {
+                    id: transactionID
+                }
+            })
+            return transaction
+        } catch (error) {
+            Logger.error(error as string)
+            return null
+        }
+    }
 	public async updateTransaction(
 		transactionID: string,
 		userID: string,
@@ -56,7 +102,27 @@ class FinancialService {
 		description: string,
 		date: Date,
 		tags: string[]
-	) {}
+	) {
+        try {
+            const transaction = await prisma.transaction.update({
+                where: {
+                    id: transactionID
+                },
+                data: {
+                    userId: userID,
+                    amount: amount,
+                    category: category,
+                    description: description,
+                    date: date,
+                    tags: tags
+                }
+            })
+            return transaction
+        } catch (error) {
+            Logger.error(error as string)
+            return null
+        }
+    }
 
 	// Expenses
 	public async createExpense() {}
