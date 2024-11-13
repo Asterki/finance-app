@@ -18,11 +18,11 @@ class FinancialService {
 	}
 
     // Transactions
-	public async createTransaction() {}
-	public async deleteTransaction() {}
-    public async getTransactions() {}
-    public async getTransaction() {}
-    public async updateTransaction() {}
+	public async createTransaction(userID: string, amount:number, category: string, description: string, date: Date, tags: string[]) {}
+	public async deleteTransaction(transactionID: string) {}
+    public async getTransactions(userID: string, amount?: number) {}
+    public async getTransaction(transactionID: string) {}
+    public async updateTransaction(transactionID: string, userID: string, amount:number, category: string, description: string, date: Date, tags: string[]) {}
 
     // Expenses
 	public async createExpense() {}

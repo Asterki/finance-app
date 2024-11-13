@@ -16,7 +16,7 @@ export type UserPreferences = {
   timezone: string; // Timezone setting (e.g., "America/New_York")
   theme: string; // Dark or light theme
 };
-
+ 
 // Expense Model
 export type Expense = {
   id: string; // Unique identifier (UUID or auto-incremented ID)
