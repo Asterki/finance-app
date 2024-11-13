@@ -40,7 +40,7 @@ const disableTFA = async (password: string) => {
 			`${apiEndpoint}/disableTFA`,
 			{
 				password,
-			},
+			} as Types.DisableTFARequestBody,
 			{
 				withCredentials: true,
 			}
@@ -69,9 +69,13 @@ const updateProfile = async (profile: {
 	timezone: string
 }) => {
 	try {
-		const response = await axios.post<Types.UpdateProfileResponseData>(`${apiEndpoint}/update`, profile, {
-			withCredentials: true,
-		})
+		const response = await axios.post<Types.UpdateProfileResponseData>(
+			`${apiEndpoint}/update`,
+			profile as Types.UpdateProfileRequestBody,
+			{
+				withCredentials: true,
+			}
+		)
 
 		return {
 			status: response.data.status,
@@ -91,9 +95,12 @@ const updateProfile = async (profile: {
 
 const fetchPreferences = async () => {
 	try {
-		const response = await axios.get<Types.FetchPreferencesResponseData>(`${apiEndpoint}/fetch`, {
-			withCredentials: true,
-		})
+		const response = await axios.get<Types.FetchPreferencesResponseData>(
+			`${apiEndpoint}/fetch`,
+			{
+				withCredentials: true,
+			}
+		)
 
 		return {
 			status: response.data.status,
@@ -119,7 +126,7 @@ const changePassword = async (oldPassword: string, newPassword: string) => {
 			{
 				oldPassword,
 				newPassword,
-			},
+			} as Types.ChangePasswordRequestBody,
 			{
 				withCredentials: true,
 			}
@@ -143,9 +150,39 @@ const changePassword = async (oldPassword: string, newPassword: string) => {
 
 const generateRecoveryCode = async (email: string) => {
 	try {
-		const response = await axios.post<Types.GenerateRecoveryCodeResponseData>(
-			`${apiEndpoint}/generateRecoveryCode`,
-			{ email },
+		const response =
+			await axios.post<Types.GenerateRecoveryCodeResponseData>(
+				`${apiEndpoint}/generateRecoveryCode`,
+				{ email } as Types.GenerateRecoveryCodeRequestBody,
+				{
+					withCredentials: true,
+				}
+			)
+
+		return {
+			status: response.data.status,
+		}
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				status: handleResponseError(error),
+			}
+		} else {
+			return {
+				status: 'unknown-error',
+			}
+		}
+	}
+}
+
+const resetPassword = async (resetToken: string, newPassword: string) => {
+	try {
+		const response = await axios.post<Types.ChangePasswordResponseData>(
+			`${apiEndpoint}/resetPassword`,
+			{
+				resetToken,
+				newPassword,
+			} as Types.ResetPasswordRequestBody,
 			{
 				withCredentials: true,
 			}
@@ -153,7 +190,6 @@ const generateRecoveryCode = async (email: string) => {
 
 		return {
 			status: response.data.status,
-			recoveryCode: response.data,
 		}
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
@@ -175,4 +211,5 @@ export default {
 	fetchPreferences,
 	changePassword,
 	generateRecoveryCode,
+	resetPassword,
 }
