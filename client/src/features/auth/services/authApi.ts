@@ -1,20 +1,13 @@
 import axios from 'axios'
 import handleResponseError from '../../../utils/handleResponseError'
 
-import type {
-	LoginRequestBody,
-	LoginResponseData,
-	LogoutResponseData,
-	FetchResponseData,
-	RegisterRequestBody,
-	RegisterResponseData,
-} from '../../../../../shared/api/accounts'
+import * as Types from '../../../../../shared/api/accounts'
 
 const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/accounts`
 
 const fetchUser = async () => {
 	try {
-		const res = await axios.get<FetchResponseData>(`${apiEndpoint}/me`, {
+		const res = await axios.get<Types.FetchResponseData>(`${apiEndpoint}/me`, {
 			withCredentials: true,
 		})
 
@@ -39,7 +32,7 @@ const fetchUser = async () => {
 
 const logout = async () => {
 	try {
-		const response = await axios.post<LogoutResponseData>(
+		const response = await axios.post<Types.LogoutResponseData>(
 			`${apiEndpoint}/logout`,
 			{},
 			{
@@ -55,13 +48,13 @@ const logout = async () => {
 
 const login = async (email: string, password: string, tfaCode: string = '') => {
 	try {
-		const res = await axios.post<LoginResponseData>(
+		const res = await axios.post<Types.LoginResponseData>(
 			`${apiEndpoint}/login`,
 			{
 				email,
 				password,
 				tfaCode,
-			} as LoginRequestBody,
+			} as Types.LoginRequestBody,
 			{
 				withCredentials: true,
 			}
@@ -89,7 +82,7 @@ const register = async (
 	timezone: string
 ) => {
 	try {
-		const res = await axios.post<RegisterResponseData>(
+		const res = await axios.post<Types.RegisterResponseData>(
 			`${apiEndpoint}/register`,
 			{
 				name,
@@ -98,7 +91,7 @@ const register = async (
 				currency,
 				language,
 				timezone,
-			} as RegisterRequestBody,
+			} as Types.RegisterRequestBody,
 			{
 				withCredentials: true,
 			}
