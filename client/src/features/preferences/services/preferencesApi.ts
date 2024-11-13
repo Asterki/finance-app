@@ -204,6 +204,32 @@ const resetPassword = async (resetToken: string, newPassword: string) => {
 	}
 }
 
+const generateTFASecret = async () => {
+	try {
+		const response = await axios.get<Types.GenerateTFASecretResponseData>(
+			`${apiEndpoint}/generateTFASecret`,
+			{
+				withCredentials: true,
+			}
+		)
+
+		return {
+			secret: response.data.secret,
+			status: 'success',
+		}
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				status: handleResponseError(error),
+			}
+		} else {
+			return {
+				status: 'unknown-error',
+			}
+		}
+	}
+}
+
 export default {
 	enableTFA,
 	disableTFA,
@@ -212,4 +238,5 @@ export default {
 	changePassword,
 	generateRecoveryCode,
 	resetPassword,
+	generateTFASecret
 }

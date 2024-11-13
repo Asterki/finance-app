@@ -20,6 +20,10 @@ const usePreferences = () => {
 		return await preferencesApi.updateProfile(newPreferences)
 	}
 
+	const generateTFASecret = async () => {
+		return await preferencesApi.generateTFASecret()
+	}
+
 	React.useEffect(() => {
 		;(async () => {
 			const response = await preferencesApi.fetchPreferences()
@@ -35,6 +39,7 @@ const usePreferences = () => {
 	return {
 		preferences: currentPreferences,
 		updateProfile,
+		generateTFASecret
 	}
 }
 
