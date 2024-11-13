@@ -16,6 +16,7 @@ import preferencesFetch from '../controllers/preferences/fetch'
 import preferencesChangePassword from '../controllers/preferences/changePassword'
 import generateRecoveryCode from '../controllers/preferences/generateRecoveryCode'
 import resetPassword from '../controllers/preferences/resetPassword'
+import generateTFASecret from '../controllers/preferences/generateTFASecret'
 
 const router = express.Router()
 
@@ -89,5 +90,8 @@ router.post(
 	validateRequestBody(resetPasswordSchema),
 	resetPassword
 )
+
+// Generate TFA secret
+router.get('/generateTFASecret', generateTFASecret)
 
 export default router

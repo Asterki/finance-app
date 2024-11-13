@@ -61,3 +61,8 @@ export interface ResetPasswordRequestBody {
 export interface ResetPasswordResponseData {
 	status: 'success' | 'internal-error' | 'invalid-reset-token'
 }
+
+export interface GenerateTFASecretResponseData {
+	status: 'success' | 'internal-error'
+	secret?: string
+}
