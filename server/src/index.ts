@@ -60,7 +60,16 @@ class Server {
 	}
 
 	private checkEnv() {
-		const requiredKeys = ['SESSION_SECRET']
+		const requiredKeys = [
+			'SESSION_SECRET',
+			'DATABASE_URL',
+			'EMAIL_HOST',
+			'EMAIL_PORT',
+			'EMAIL_SECURE',
+			'EMAIL_USER',
+			'EMAIL_PASS',
+			'EMAIL_FROM',
+		]
 		for (const key of requiredKeys) {
 			if (!process.env[key]) {
 				Logger.error(`Missing ${key} in .env file`)
