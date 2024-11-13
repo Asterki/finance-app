@@ -106,7 +106,13 @@ class AccountService {
 		userID: string,
 		password: string,
 		tfaCode?: string
-	) {
+	): Promise<{
+		status:
+			| 'invalid-password'
+			| 'internal-error'
+			| 'invalid-tfa'
+			| 'success'
+	}> {
 		try {
 			const user = await prisma.user.findFirst({
 				where: {

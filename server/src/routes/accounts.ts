@@ -13,6 +13,7 @@ import accountsFetch from '../controllers/accounts/fetch';
 import accountsRegister from '../controllers/accounts/register';
 import accountsLogin from '../controllers/accounts/login';
 import accountsLogout from '../controllers/accounts/logout';
+import accountsDeleteAccount from '../controllers/accounts/deleteAccount';
 
 const router = express.Router();
 
@@ -43,5 +44,12 @@ router.post('/logout', ensureAuthenticated, accountsLogout);
 
 // Apply the error handling middleware
 router.use(errorHandler);
+
+// Delete account
+const deleteAccountSchema = z.object({
+  password: z.string().min(8).max(100),
+  tfaCode: z.string().optional(),
+});
+router.delete('/me', ensureAuthenticated, validateRequestBody(deleteAccountSchema), accountsDeleteAccount);
 
 export default router;

@@ -36,3 +36,13 @@ export interface RegisterRequestBody {
 export interface RegisterResponseData {
 	status: 'success' | 'user-exists' | 'internal-error'
 }
+
+
+export interface DeleteAccountRequestBody {
+	password: string
+	tfaCode?: string
+}
+
+export interface DeleteAccountResponseData {
+	status: "invalid-password" | "internal-error" | "invalid-tfa" | "success";
+}
