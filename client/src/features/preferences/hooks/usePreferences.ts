@@ -44,6 +44,10 @@ const usePreferences = () => {
 		}
 	}
 
+	const changePassword = async (oldPassword: string, newPassword: string) => {
+		return await preferencesApi.changePassword(oldPassword, newPassword)
+	}
+
 	React.useEffect(() => {
 		;(async () => {
 			await fetchPreferences()
@@ -58,6 +62,7 @@ const usePreferences = () => {
 		enableTFA,
 		fetchPreferences,
 		disableTFA,
+		changePassword,
 	}
 }
 

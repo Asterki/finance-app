@@ -22,6 +22,7 @@ const PreferencesPage = () => {
 		enableTFA,
 		fetchPreferences,
 		disableTFA,
+		changePassword,
 	} = usePreferences()
 
 	const tfaInputRef = React.useRef<HTMLInputElement>(null)
@@ -107,7 +108,33 @@ const PreferencesPage = () => {
 	}
 
 	const changePasswordButtonClick = async () => {
-		alert("Currently in development")
+		if (!user) return
+
+		const oldPassword = oldPasswordRef.current?.value
+		const newPassword = newPasswordRef.current?.value
+
+		if (!oldPassword || !newPassword) {
+			showNotification('Error', 'Please fill out all fields', 'error')
+			return
+		}
+
+		const response = await changePassword(oldPassword, newPassword)
+		if (response.status == 'success') {
+			showNotification(
+				'Success',
+				'Password Changed Successfully',
+				'success'
+			)
+			oldPasswordRef.current!.value = ''
+			newPasswordRef.current!.value = ''
+		} else if (response.status == 'invalid-password') {
+			showNotification('Error', 'Invalid Password', 'error')
+			newPasswordRef.current!.value = ''
+		} else {
+			showNotification('Error', 'Failed to Change Password', 'error')
+			newPasswordRef.current!.value = ''
+			oldPasswordRef.current!.value = ''
+		}
 	}
 
 	return (
