@@ -6,8 +6,9 @@ import {
 	DisableTFAResponseData as ResponseData,
 	DisableTFARequestBody as RequestBody,
 } from '../../../../shared/api/preferences'
-
 import { User } from '@prisma/client'
+
+import ResponseError from '../../utils/responseError'
 
 const disableTFAHandler = async (
 	req: Request<{}, {}, RequestBody>,
@@ -23,10 +24,16 @@ const disableTFAHandler = async (
 			password
 		)
 		if (validPassword) {
-			const result = await PreferencesService.disableTwoFactorAuth(user.id)
+			const result = await PreferencesService.disableTwoFactorAuth(
+				user.id
+			)
 			res.status(200).send(result)
 		} else {
-			res.status(200).send({ status: 'invalid-password' })
+			throw new ResponseError(
+				403,
+				'invalid-password',
+				'The provided password is incorrect.'
+			)
 		}
 	} catch (error) {
 		next(error)

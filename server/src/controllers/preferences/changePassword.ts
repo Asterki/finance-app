@@ -20,10 +20,10 @@ const changePasswordHandler = async (
 		const result = await PreferencesService.changePassword(
 			user.id,
 			oldPassword,
-            newPassword
+			newPassword
 		)
-		
-        res.json(result)
+
+		res.json(result)
 	} catch (error) {
 		next(error)
 	}

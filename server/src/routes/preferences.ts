@@ -28,7 +28,8 @@ const enableTFASchema = z.object({
 router.post(
 	'/enableTFA',
 	validateRequestBody(enableTFASchema),
-	preferencesEnableTFA
+	preferencesEnableTFA,
+	errorHandler
 )
 
 // Disable TFA
@@ -38,7 +39,8 @@ const disableTFASchema = z.object({
 router.post(
 	'/disableTFA',
 	validateRequestBody(disableTFASchema),
-	preferencesDisableTFA
+	preferencesDisableTFA,
+	errorHandler
 )
 
 // Update Profile
@@ -52,11 +54,12 @@ router.post(
 	'/update',
 	ensureAuthenticated,
 	validateRequestBody(updateProfileSchema),
-	preferencesUpdate
+	preferencesUpdate,
+	errorHandler
 )
 
 // Fetch
-router.get('/fetch', ensureAuthenticated, preferencesFetch)
+router.get('/fetch', ensureAuthenticated, preferencesFetch, errorHandler)
 
 // Change Password
 const changePasswordSchema = z.object({
@@ -67,7 +70,8 @@ router.post(
 	'/changePassword',
 	ensureAuthenticated,
 	validateRequestBody(changePasswordSchema),
-	preferencesChangePassword
+	preferencesChangePassword,
+	errorHandler
 )
 
 // Generate recovery code
@@ -77,7 +81,8 @@ const generateRecoveryCodeSchema = z.object({
 router.post(
 	'/generateRecoveryCode',
 	validateRequestBody(generateRecoveryCodeSchema),
-	generateRecoveryCode
+	generateRecoveryCode,
+	errorHandler
 )
 
 // Reset password
@@ -88,10 +93,11 @@ const resetPasswordSchema = z.object({
 router.post(
 	'/resetPassword',
 	validateRequestBody(resetPasswordSchema),
-	resetPassword
+	resetPassword,
+	errorHandler
 )
 
 // Generate TFA secret
-router.get('/generateTFASecret', generateTFASecret)
+router.get('/generateTFASecret', generateTFASecret, errorHandler)
 
 export default router

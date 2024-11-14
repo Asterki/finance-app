@@ -7,15 +7,17 @@ import {
 } from '../../../../shared/api/accounts'
 import { User } from '@prisma/client'
 
+import ResponseError from '../../utils/responseError'
+
 const handler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
 	next: NextFunction
 ) => {
-	const user = req.user as User
-	const { password, tfaCode } = req.body
-
 	try {
+		const user = req.user as User
+		const { password, tfaCode } = req.body
+
 		const isValidPassword = await AccountService.authenticatePassword(
 			user.id,
 			password
@@ -27,12 +29,16 @@ const handler = async (
 				tfaCode
 			)
 
-            res.send(result)
+			res.send(result)
 		} else {
-			res.status(401).json({ status: 'invalid-password' })
+			throw new ResponseError(
+				401,
+				'invalid-password',
+				'The provided password is incorrect.'
+			)
 		}
 	} catch (error) {
-		next()
+		next(error)
 	}
 }
 

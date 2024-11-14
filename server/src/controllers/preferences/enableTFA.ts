@@ -14,10 +14,14 @@ const enableTFAHandler = async (
 	next: NextFunction
 ) => {
 	try {
-        const { code, secret } = req.body
+		const { code, secret } = req.body
 		const user = req.user as User
 
-        const result = await PreferencesService.activateTwoFactorAuth(user.id, secret, code)
+		const result = await PreferencesService.activateTwoFactorAuth(
+			user.id,
+			secret,
+			code
+		)
 		res.status(200).send(result)
 	} catch (error) {
 		next(error)

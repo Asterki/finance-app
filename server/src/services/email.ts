@@ -58,11 +58,7 @@ class MailerService {
 		return this.instance
 	}
 
-	public async sendMail(
-		to: string,
-		subject: string,
-		html: string
-	) {
+	public async sendMail(to: string, subject: string, html: string) {
 		return this.transporter.sendMail({
 			from: process.env.EMAIL_FROM,
 			to,

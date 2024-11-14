@@ -7,6 +7,8 @@ import {
 } from '../../../../shared/api/financial'
 import { User } from '@prisma/client'
 
+import ResponseError from '../../utils/responseError'
+
 const getTransactionByIDHandler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
@@ -22,17 +24,19 @@ const getTransactionByIDHandler = async (
 		)
 
 		if (!transaction) {
-			res.status(200).send({
-				status: 'transaction-not-found',
-			})
+			throw new ResponseError(
+				404,
+				'not-found',
+				'The requested transaction was not found.'
+			)
 		} else {
 			res.status(200).send({
 				status: 'success',
 				transaction,
 			})
 		}
-	} catch (err) {
-		next(err)
+	} catch (error) {
+		next(error)
 	}
 }
 

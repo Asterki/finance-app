@@ -18,7 +18,8 @@ const getTransactionByIDSchema = z.object({
 router.post(
 	'/getTransaction',
 	[validateRequestBody(getTransactionByIDSchema), ensureAuthenticated],
-	financialGetByID
+	financialGetByID,
+	errorHandler
 )
 
 export default router

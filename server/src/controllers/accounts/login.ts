@@ -11,24 +11,25 @@ const handler = (
 	res: Response<ResponseData>,
 	next: NextFunction
 ) => {
-	passport.authenticate('local', (err: any, user: any, info: any) => {
-		if (err) return next(err)
-		if (!user) {
-			res.status(200).send({
-				status: info.message,
-			})
-		} else {
-			req.logIn(user, (err) => {
-				if (err) return next(err)
+	try {
+		passport.authenticate('local', (err: any, user: any, info: any) => {
+			if (err) return next(err)
+			if (!user) {
 				res.status(200).send({
-					status: 'success',
+					status: info.message,
 				})
-			})
-
-		}
-			
-
-	})(req, res, next)
+			} else {
+				req.logIn(user, (err) => {
+					if (err) return next(err)
+					res.status(200).send({
+						status: 'success',
+					})
+				})
+			}
+		})(req, res, next)
+	} catch (error) {
+		next(error)
+	}
 }
 
 export default handler

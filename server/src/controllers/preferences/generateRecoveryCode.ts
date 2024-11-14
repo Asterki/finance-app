@@ -7,6 +7,8 @@ import {
 	GenerateRecoveryCodeRequestBody as RequestBody,
 } from '../../../../shared/api/preferences'
 
+import ResponseError from '../../utils/responseError'
+
 const generateRecoveryCodeHandler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
@@ -16,30 +18,35 @@ const generateRecoveryCodeHandler = async (
 		const { email } = req.body
 
 		const result = await PreferencesService.generateRecoveryCode(email)
-		if (result.status == 'success' && result.recoveryCode && result.user) {
-            const preferencesResult = await PreferencesService.getPreferences(result.user.id)
-            if (!preferencesResult) {
-                res.send({
-                    status: 'internal-error',
-                })
-            } else {
-                const template = await EmailService.getEmailHTMLTemplate("resetPassword", preferencesResult.preferences.language, {
-                    recoveryCode: result.recoveryCode,
-                    name: result.user.name,
-                    email: result.user.email,
-                })
 
-                await EmailService.sendMail(
-                    result.user.email,
-                    "Reset Password",
-                    template,
-                )
-            }
-		} else {
-			res.send({
-				status: result.status,
-			})
-		}
+		if (result.status == 'user-not-found')
+			throw new ResponseError(404, result.status)
+
+		const preferencesResult = await PreferencesService.getPreferences(
+			result.user.id
+		)
+		if (!preferencesResult)
+			throw new ResponseError(
+				500,
+				'internal-error',
+				"Couldn't fetch user preferences."
+			)
+
+		const template = await EmailService.getEmailHTMLTemplate(
+			'resetPassword',
+			preferencesResult.preferences.language,
+			{
+				recoveryCode: result.recoveryCode,
+				name: result.user.name,
+				email: result.user.email,
+			}
+		)
+
+		await EmailService.sendMail(
+			result.user.email,
+			'Reset Password',
+			template
+		)
 	} catch (error) {
 		next(error)
 	}
