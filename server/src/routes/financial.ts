@@ -12,6 +12,7 @@ import createTransaction from '../controllers/financial/createTransaction'
 import deleteTransaction from '../controllers/financial/deleteTransaction'
 import getTransactions from '../controllers/financial/getTransactions'
 import updateTransaction from '../controllers/financial/updateTransaction'
+import getBalance from '../controllers/financial/getBalance'
 
 const router = express.Router()
 
@@ -80,6 +81,14 @@ router.post(
 	'/updateTransaction',
 	[validateRequestBody(updateTransactionSchema), ensureAuthenticated],
 	updateTransaction,
+	errorHandler
+)
+
+// Get balance
+router.get(
+	'/get-balance',
+	[ensureAuthenticated],
+	getBalance,
 	errorHandler
 )
 

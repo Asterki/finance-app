@@ -51,6 +51,11 @@ export interface UpdateTransactionRequestBody {
 	tags: string[]
 }
 export interface UpdateTransactionResponseData {
-    status: 'success'
-    transaction: Transaction
+	status: 'success'
+	transaction: Transaction
+}
+
+export interface GetBalanceResponseData {
+	status: 'success'
+	balance: number
 }

@@ -131,6 +131,25 @@ class FinancialService {
 		})
 		return transaction
 	}
+
+	public async getBalance(userID: string) {
+		const transactions = await prisma.transaction.findMany({
+			where: {
+				userId: userID,
+			},
+		})
+
+		let balance = 0
+		for (const transaction of transactions) {
+			if (transaction.type === 'expense') {
+				balance -= transaction.amount
+			} else {
+				balance += transaction.amount
+			}
+		}
+
+		return balance
+	}
 }
 
 export default FinancialService.getInstance()
