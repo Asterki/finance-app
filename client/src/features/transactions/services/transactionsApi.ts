@@ -7,7 +7,7 @@ const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/transactions`
 
 const getBalance = async (): Promise<number> => {
 	const response = await axios.get<Types.GetBalanceResponseData>(
-		`${apiEndpoint}/get-balance`,
+		`${apiEndpoint}/getBalance`,
 		{
 			withCredentials: true,
 		}
@@ -47,7 +47,7 @@ const createTransaction = async (
 
 const deleteTransaction = async (transactionID: string): Promise<'success'> => {
 	const response = await axios.post<Types.DeleteTransactionResponseData>(
-		`${apiEndpoint}/delete-transaction`,
+		`${apiEndpoint}/deleteTransaction`,
 		{
 			transactionID,
 		},
@@ -66,7 +66,7 @@ const getTransactionsByFilters = async ({
 	category,
 }: Types.GetTransactionsRequestBody): Promise<Transaction[]> => {
 	const response = await axios.post<Types.GetTransactionsResponseData>(
-		`${apiEndpoint}/get-transactions`,
+		`${apiEndpoint}/getTransactions`,
 		{
 			count,
 			dayCount,
@@ -84,7 +84,7 @@ const getTransactionsByID = async (
 	transactionID: string
 ): Promise<Transaction | 'transaction-not-found'> => {
 	const response = await axios.post<Types.GetTransactionByIDResponseData>(
-		`${apiEndpoint}/get-transaction-by-id`,
+		`${apiEndpoint}/getTransaction`,
 		{
 			transactionID,
 		},
@@ -109,7 +109,7 @@ const updateTransaction = async (
 	transaction: Transaction
 }> => {
 	const response = await axios.post<Types.UpdateTransactionResponseData>(
-		`${apiEndpoint}/update-transaction`,
+		`${apiEndpoint}/updateTransaction`,
 		{
 			transactionID,
 			amount,

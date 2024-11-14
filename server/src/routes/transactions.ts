@@ -29,12 +29,12 @@ router.post(
 
 // Create transaction
 const createTransactionSchema = z.object({
-	date: z.date(),
+	date: z.string(),
 	type: z.enum(['expense', 'income']),
 	amount: z.number().positive(),
 	category: z.string().min(1).max(100),
 	description: z.string().min(1).max(100),
-	tags: z.array(z.string().max(20).min(10)).max(10),
+	tags: z.array(z.string().max(20).min(1)).max(10),
 })
 router.post(
 	'/createTransaction',
@@ -86,7 +86,7 @@ router.post(
 
 // Get balance
 router.get(
-	'/get-balance',
+	'/getBalance',
 	[ensureAuthenticated],
 	getBalance,
 	errorHandler

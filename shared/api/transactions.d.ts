@@ -14,7 +14,7 @@ export type GetTransactionByIDResponseData =
 	  }
 
 export interface CreateTransactionRequestBody {
-	date: Date
+	date: string
 	type: 'expense' | 'income'
 	amount: number
 	category: string

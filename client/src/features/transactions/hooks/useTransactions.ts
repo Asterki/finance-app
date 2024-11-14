@@ -8,7 +8,7 @@ import { RootState } from '../../../store'
 
 import transactionsApi from '../services/transactionsApi'
 
-const useFinancial = () => {
+const useTransactions = () => {
 	const dispatch = useDispatch()
 	const currentTransactions = useSelector(
 		(state: RootState) => state.transactions.currentTransactions
@@ -23,6 +23,22 @@ const useFinancial = () => {
 			)
 
 			dispatch(setTransactions(transactions))
+		} catch (error) {
+			if (isAxiosError(error)) {
+				const responseError = error.response?.data as ResponseError
+				return responseError.message
+			} else {
+				// TODO: Handle unknown errors
+				console.log(error)
+				return 'unknown-error'
+			}
+		}
+	}
+
+	const getBalance = async () => {
+		try {
+			const budget = await transactionsApi.getBalance()
+			return budget
 		} catch (error) {
 			if (isAxiosError(error)) {
 				const responseError = error.response?.data as ResponseError
@@ -68,9 +84,15 @@ const useFinancial = () => {
 		;(async () => {
 			await fetchTransactions()
 		})()
-	})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
-	return { currentTransactions, fetchTransactions, createTransaction }
+	return {
+		currentTransactions,
+		fetchTransactions,
+		createTransaction,
+		getBalance,
+	}
 }
 
-export default useFinancial
+export default useTransactions
