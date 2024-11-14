@@ -8,7 +8,7 @@ import {
 
 import ResponseError from '../../utils/responseError'
 
-const handler = async (
+const registerHandler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
 	next: NextFunction
@@ -43,4 +43,4 @@ const handler = async (
 	}
 }
 
-export default handler
+export default registerHandler

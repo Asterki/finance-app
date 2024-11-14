@@ -3,7 +3,7 @@ import { FetchResponseData as ResponseData } from '../../../../shared/api/accoun
 
 import { User, UserPreferences } from '@prisma/client'
 
-const accountsFetch = (
+const fetchHandler = (
 	req: Request,
 	res: Response<ResponseData>,
 	next: NextFunction
@@ -20,4 +20,4 @@ const accountsFetch = (
 	}
 }
 
-export default accountsFetch
+export default fetchHandler

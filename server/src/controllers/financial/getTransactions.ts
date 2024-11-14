@@ -7,7 +7,7 @@ import {
 } from '../../../../shared/api/financial'
 import { User } from '@prisma/client'
 
-const deleteTransactionHandler = async (
+const getTransactionsHandler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
 	next: NextFunction
@@ -32,4 +32,4 @@ const deleteTransactionHandler = async (
 	}
 }
 
-export default deleteTransactionHandler
+export default getTransactionsHandler

@@ -9,7 +9,7 @@ import { User } from '@prisma/client'
 
 import ResponseError from '../../utils/responseError'
 
-const handler = async (
+const deleteAccountHandler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
 	next: NextFunction
@@ -42,4 +42,4 @@ const handler = async (
 	}
 }
 
-export default handler
+export default deleteAccountHandler

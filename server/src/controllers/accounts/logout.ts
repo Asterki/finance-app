@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { LogoutResponseData as ResponseData } from '../../../../shared/api/accounts'
 
-const handler = async (
+const logoutHandler = async (
 	req: Request,
 	res: Response<ResponseData>,
 	next: NextFunction
@@ -18,4 +18,4 @@ const handler = async (
 	}
 }
 
-export default handler
+export default logoutHandler

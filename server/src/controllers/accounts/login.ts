@@ -6,7 +6,7 @@ import {
 	LoginRequestBody as RequestBody,
 } from '../../../../shared/api/accounts'
 
-const handler = (
+const loginHandler = (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
 	next: NextFunction
@@ -32,4 +32,4 @@ const handler = (
 	}
 }
 
-export default handler
+export default loginHandler
