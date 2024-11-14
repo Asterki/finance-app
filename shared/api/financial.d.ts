@@ -21,3 +21,11 @@ export interface CreateTransactionResponseData {
     status: 'success'
     transaction: Transaction
 }
+
+export interface DeleteTransactionRequestBody {
+    transactionID: string
+}
+export interface DeleteTransactionResponseData {
+    status: 'success'
+    transaction: Transaction
+}

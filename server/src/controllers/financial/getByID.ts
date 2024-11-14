@@ -19,8 +19,8 @@ const getTransactionByIDHandler = async (
 		const { transactionId } = req.body
 
 		const transaction = await FinancialService.getTransaction(
-			transactionId,
-			user.id
+			user.id,
+			transactionId
 		)
 
 		if (!transaction) {

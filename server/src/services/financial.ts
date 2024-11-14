@@ -40,14 +40,17 @@ class FinancialService {
 		})
 		return transaction
 	}
-	public async deleteTransaction(transactionID: string) {
+	
+	public async deleteTransaction(userID: string, transactionID: string) {
 		const transaction = await prisma.transaction.delete({
 			where: {
 				id: transactionID,
+				userId: userID,
 			},
 		})
 		return transaction
 	}
+
 	public async getTransactions(
 		userID: string,
 		filter: {
@@ -93,7 +96,8 @@ class FinancialService {
 		}
 		return transactions
 	}
-	public async getTransaction(transactionID: string, userID: string) {
+
+	public async getTransaction(userID: string, transactionID: string) {
 		const transaction = await prisma.transaction.findUnique({
 			where: {
 				id: transactionID,
@@ -102,6 +106,7 @@ class FinancialService {
 		})
 		return transaction
 	}
+
 	public async updateTransaction(
 		transactionID: string,
 		userID: string,

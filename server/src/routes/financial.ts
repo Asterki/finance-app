@@ -9,6 +9,7 @@ import errorHandler from '../middleware/errorHandler'
 // Import handlers
 import financialGetByID from '../controllers/financial/getByID'
 import createTransaction from '../controllers/financial/createTransaction'
+import deleteTransaction from '../controllers/financial/deleteTransaction'
 
 const router = express.Router()
 
@@ -35,6 +36,16 @@ router.post(
 	'/createTransaction',
 	[validateRequestBody(createTransactionSchema), ensureAuthenticated],
 	createTransaction,
+	errorHandler
+)
+
+const deleteTransactionSchema = z.object({
+	transactionID: z.string().min(1).max(100),
+})
+router.post(
+	'/deleteTransaction',
+	[validateRequestBody(deleteTransactionSchema), ensureAuthenticated],
+	deleteTransaction,
 	errorHandler
 )
 
