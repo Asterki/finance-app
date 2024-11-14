@@ -186,7 +186,7 @@ class FinancialService {
 			return null
 		}
 	}
-	public async getExpense(expenseID: string) {
+	public async getExpenseByID(expenseID: string) {
 		try {
 			const expense = await prisma.expense.findUnique({
 				where: {
@@ -223,6 +223,44 @@ class FinancialService {
 				},
 			})
 			return expense
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async getSpendingByCategory(userID: string, category: string) {
+		try {
+			const expenses = await prisma.expense.findMany({
+				where: {
+					userId: userID,
+					category: category,
+				},
+			})
+			let total = 0
+			for (const expense of expenses) {
+				total += expense.amount
+			}
+			return total
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async getSpendingByTag(userID: string, tag: string) {
+		try {
+			const expenses = await prisma.expense.findMany({
+				where: {
+					userId: userID,
+					tags: {
+						has: tag,
+					},
+				},
+			})
+			let total = 0
+			for (const expense of expenses) {
+				total += expense.amount
+			}
+			return total
 		} catch (error) {
 			Logger.error(error as string)
 			return null
@@ -289,7 +327,7 @@ class FinancialService {
 			return null
 		}
 	}
-	public async getIncome(incomeID: string) {
+	public async getIncomeByID(incomeID: string) {
 		try {
 			const income = await prisma.income.findUnique({
 				where: {
@@ -324,6 +362,87 @@ class FinancialService {
 				},
 			})
 			return income
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async getIncomeBySource(userID: string, source: string) {
+		try {
+			const incomes = await prisma.income.findMany({
+				where: {
+					userId: userID,
+					source: source,
+				},
+			})
+			let total = 0
+			for (const income of incomes) {
+				total += income.amount
+			}
+			return total
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+
+	// Financial functions
+	public async getBalance(userID: string, dayCount?: number) {
+		try {
+			const where = dayCount
+				? {
+						date: {
+							gte: new Date(
+								new Date().getTime() -
+									1000 * 60 * 60 * 24 * dayCount
+							),
+						},
+				  }
+				: {
+						userID: userID,
+				  }
+
+			const expenses = await prisma.expense.findMany({
+				where: where,
+			})
+			const incomes = await prisma.income.findMany({
+				where: where,
+			})
+			let totalExpenses = 0
+			let totalIncomes = 0
+			for (const expense of expenses) {
+				totalExpenses += expense.amount
+			}
+			for (const income of incomes) {
+				totalIncomes += income.amount
+			}
+			return totalIncomes - totalExpenses
+		} catch (error) {
+			Logger.error(error as string)
+			return null
+		}
+	}
+	public async getNetWorth(userID: string) {
+		try {
+			const expenses = await prisma.expense.findMany({
+				where: {
+					userId: userID,
+				},
+			})
+			const incomes = await prisma.income.findMany({
+				where: {
+					userId: userID,
+				},
+			})
+			let totalExpenses = 0
+			let totalIncomes = 0
+			for (const expense of expenses) {
+				totalExpenses += expense.amount
+			}
+			for (const income of incomes) {
+				totalIncomes += income.amount
+			}
+			return totalIncomes - totalExpenses
 		} catch (error) {
 			Logger.error(error as string)
 			return null
