@@ -8,6 +8,7 @@ import errorHandler from '../middleware/errorHandler'
 
 // Import handlers
 import financialGetByID from '../controllers/financial/getByID'
+import createTransaction from '../controllers/financial/createTransaction'
 
 const router = express.Router()
 
@@ -19,6 +20,21 @@ router.post(
 	'/getTransaction',
 	[validateRequestBody(getTransactionByIDSchema), ensureAuthenticated],
 	financialGetByID,
+	errorHandler
+)
+
+const createTransactionSchema = z.object({
+	date: z.date(),
+	type: z.enum(['expense', 'income']),
+	amount: z.number().positive(),
+	category: z.string().min(1).max(100),
+	description: z.string().min(1).max(100),
+	tags: z.array(z.string().max(20).min(10)).max(10),
+})
+router.post(
+	'/createTransaction',
+	[validateRequestBody(createTransactionSchema), ensureAuthenticated],
+	createTransaction,
 	errorHandler
 )
 
