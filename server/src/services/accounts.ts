@@ -75,9 +75,7 @@ class AccountService {
 		userID: string,
 		password: string,
 		tfaCode?: string
-	): Promise<{
-		status: 'invalid-password' | 'invalid-tfa' | 'success'
-	}> {
+	): Promise<'invalid-password' | 'invalid-tfa' | 'success'> {
 		const user = await prisma.user.findFirst({
 			where: {
 				id: userID,
@@ -94,7 +92,7 @@ class AccountService {
 
 		// Check passwords and TFA CODE
 		if (!bcrypt.compareSync(password, user.passwordHash))
-			return { status: 'invalid-password' }
+			return 'invalid-password'
 
 		if (user.security?.twoFactorEnabled) {
 			if (
@@ -105,7 +103,7 @@ class AccountService {
 					token: tfaCode,
 				})
 			)
-				return { status: 'invalid-tfa' }
+				return 'invalid-tfa'
 		}
 		// Delete the user and their related documents
 		await prisma.user.delete({
@@ -117,9 +115,7 @@ class AccountService {
 				preferences: true,
 			},
 		})
-		return {
-			status: 'success',
-		}
+		return 'success'
 	}
 
 	public async authenticatePassword(userID: string, password: string) {

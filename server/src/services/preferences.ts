@@ -26,7 +26,7 @@ class PreferencesService {
 			timezone: string
 			language: string
 		}
-	): Promise<{ status: 'success' }> {
+	): Promise<'success'> {
 		await prisma.user.update({
 			where: {
 				id: userID,
@@ -43,14 +43,14 @@ class PreferencesService {
 			},
 		})
 
-		return { status: 'success' }
+		return 'success'
 	}
 
 	public async activateTwoFactorAuth(
 		userID: string,
 		secret: string,
 		code: string
-	): Promise<{ status: 'invalid-code' | 'success' }> {
+	): Promise<'success' | 'invalid-code'> {
 		// Verify the token
 		const verified = speakeasy.totp.verify({
 			secret,
@@ -59,7 +59,7 @@ class PreferencesService {
 		})
 
 		if (!verified) {
-			return { status: 'invalid-code' }
+			return 'invalid-code'
 		}
 
 		// Update the user's security settings
@@ -77,12 +77,10 @@ class PreferencesService {
 			},
 		})
 
-		return { status: 'success' }
+		return 'success'
 	}
 
-	public async disableTwoFactorAuth(
-		userID: string
-	): Promise<{ status: 'success' }> {
+	public async disableTwoFactorAuth(userID: string): Promise<'success'> {
 		await prisma.user.update({
 			where: {
 				id: userID,
@@ -97,7 +95,7 @@ class PreferencesService {
 			},
 		})
 
-		return { status: 'success' }
+		return 'success'
 	}
 
 	public async getPreferences(userID: string) {
@@ -124,9 +122,7 @@ class PreferencesService {
 	public async recoverPassword(
 		resetToken: string,
 		newPassword: string
-	): Promise<{
-		status: 'success' | 'invalid-reset-token'
-	}> {
+	): Promise<'success' | 'invalid-reset-token'> {
 		const user = await prisma.user.findFirst({
 			where: {
 				security: {
@@ -134,10 +130,7 @@ class PreferencesService {
 				},
 			},
 		})
-		if (!user)
-			return {
-				status: 'invalid-reset-token',
-			}
+		if (!user) return 'invalid-reset-token'
 
 		await prisma.security.update({
 			where: {
@@ -157,24 +150,22 @@ class PreferencesService {
 			},
 		})
 
-		return {
-			status: 'success',
-		}
+		return 'success'
 	}
 
 	public async changePassword(
 		userID: string,
 		oldPassword: string,
 		newPassword: string
-	): Promise<{ status: 'success' | 'invalid-password' }> {
+	): Promise<'success' | 'invalid-password'> {
 		const user = await prisma.user.findFirst({
 			where: {
 				id: userID,
 			},
 		})
-		if (!user) return { status: 'invalid-password' } // Although this should never happen
+		if (!user) return 'invalid-password' // Although this should never happen
 		if (!bcrypt.compareSync(oldPassword, user.passwordHash))
-			return { status: 'invalid-password' }
+			return 'invalid-password'
 
 		await prisma.user.update({
 			where: {
@@ -185,9 +176,7 @@ class PreferencesService {
 			},
 		})
 
-		return {
-			status: 'success',
-		}
+		return 'success'
 	}
 
 	public async generateRecoveryCode(email: string): Promise<

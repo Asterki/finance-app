@@ -27,7 +27,7 @@ const disableTFAHandler = async (
 			const result = await PreferencesService.disableTwoFactorAuth(
 				user.id
 			)
-			res.status(200).send(result)
+			res.status(200).send({ status: result })
 		} else {
 			throw new ResponseError(
 				403,

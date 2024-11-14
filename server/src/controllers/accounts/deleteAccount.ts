@@ -29,7 +29,25 @@ const deleteAccountHandler = async (
 				tfaCode
 			)
 
-			res.send(result)
+			switch (result) {
+				case 'invalid-password':
+					throw new ResponseError(
+						409,
+						'invalid-password',
+						'The provided password is incorrect.'
+					)
+				case 'invalid-tfa':
+					throw new ResponseError(
+						409,
+						'invalid-tfa',
+						'The provided TFA code is incorrect.'
+					)
+				default:
+					res.send({
+						status: result,
+					})
+					break
+			}
 		} else {
 			throw new ResponseError(
 				401,

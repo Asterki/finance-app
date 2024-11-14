@@ -6,6 +6,8 @@ import {
 	EnableTFARequestBody as RequestBody,
 } from '../../../../shared/api/preferences'
 
+import ResponseError from '../../utils/responseError'
+
 import { User } from '@prisma/client'
 
 const enableTFAHandler = async (
@@ -22,7 +24,15 @@ const enableTFAHandler = async (
 			secret,
 			code
 		)
-		res.status(200).send(result)
+
+		if (result == 'invalid-code')
+			throw new ResponseError(
+				400,
+				'invalid-code',
+				'The provided TFA code is invalid.'
+			)
+
+		res.status(200).send({ status: result })
 	} catch (error) {
 		next(error)
 	}
