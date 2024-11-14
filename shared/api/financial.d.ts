@@ -29,3 +29,15 @@ export interface DeleteTransactionResponseData {
     status: 'success'
     transaction: Transaction
 }
+
+export interface GetTransactionsRequestBody {
+    count?: number
+    dayCount?: number
+    type?: 'expense' | 'income'
+    category?: string
+}
+
+export interface GetTransactionsResponseData {
+    status: 'success'
+    transactions: Transaction[]
+}
