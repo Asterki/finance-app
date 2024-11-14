@@ -4,10 +4,14 @@ export interface GetTransactionByIDRequestBody {
 	transactionId: string
 }
 
-export interface GetTransactionByIDResponseData {
-	status: 'success' | 'transaction-not-found'
-	transaction?: Transaction
-}
+export type GetTransactionByIDResponse =
+	| {
+			status: 'success'
+			transaction: Transaction
+	  }
+	| {
+			status: 'transaction-not-found'
+	  }
 
 export interface CreateTransactionRequestBody {
 	date: Date
