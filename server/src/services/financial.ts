@@ -76,7 +76,9 @@ class FinancialService {
 				// @ts-ignore We're going to set the value here
 				where['date'] = {
 					gte: new Date(
-						new Date().setDate(new Date().getDate() - filter.dayCount)
+						new Date().setDate(
+							new Date().getDate() - filter.dayCount
+						)
 					),
 				}
 			}
@@ -107,11 +109,12 @@ class FinancialService {
 			return null
 		}
 	}
-	public async getTransaction(transactionID: string) {
+	public async getTransaction(transactionID: string, userID: string) {
 		try {
 			const transaction = await prisma.transaction.findUnique({
 				where: {
 					id: transactionID,
+					userId: userID,
 				},
 			})
 			return transaction
