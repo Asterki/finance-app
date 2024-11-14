@@ -7,12 +7,12 @@ import { validateRequestBody } from '../middleware/validationMiddleware'
 import errorHandler from '../middleware/errorHandler'
 
 // Import handlers
-import preferencesEnableTFA from '../controllers/preferences/enableTFA'
-import preferencesDisableTFA from '../controllers/preferences/disableTFA'
-import preferencesUpdate from '../controllers/preferences/update'
-import preferencesFetch from '../controllers/preferences/fetch'
-import preferencesChangePassword from '../controllers/preferences/changePassword'
-import generateRecoveryCode from '../controllers/preferences/generateRecoveryCode'
+import enableTFA from '../controllers/preferences/enableTFA'
+import disableTFA from '../controllers/preferences/disableTFA'
+import update from '../controllers/preferences/update'
+import fetch from '../controllers/preferences/fetch'
+import changePassword from '../controllers/preferences/changePassword'
+import recoveryCode from '../controllers/preferences/generateRecoveryCode'
 import resetPassword from '../controllers/preferences/resetPassword'
 import generateTFASecret from '../controllers/preferences/generateTFASecret'
 
@@ -26,7 +26,7 @@ const enableTFASchema = z.object({
 router.post(
 	'/enableTFA',
 	validateRequestBody(enableTFASchema),
-	preferencesEnableTFA,
+	enableTFA,
 	errorHandler
 )
 
@@ -37,7 +37,7 @@ const disableTFASchema = z.object({
 router.post(
 	'/disableTFA',
 	validateRequestBody(disableTFASchema),
-	preferencesDisableTFA,
+	disableTFA,
 	errorHandler
 )
 
@@ -52,12 +52,12 @@ router.post(
 	'/update',
 	ensureAuthenticated,
 	validateRequestBody(updateProfileSchema),
-	preferencesUpdate,
+	update,
 	errorHandler
 )
 
 // Fetch
-router.get('/fetch', ensureAuthenticated, preferencesFetch, errorHandler)
+router.get('/fetch', ensureAuthenticated, fetch, errorHandler)
 
 // Change Password
 const changePasswordSchema = z.object({
@@ -68,7 +68,7 @@ router.post(
 	'/changePassword',
 	ensureAuthenticated,
 	validateRequestBody(changePasswordSchema),
-	preferencesChangePassword,
+	changePassword,
 	errorHandler
 )
 
@@ -79,7 +79,7 @@ const generateRecoveryCodeSchema = z.object({
 router.post(
 	'/generateRecoveryCode',
 	validateRequestBody(generateRecoveryCodeSchema),
-	generateRecoveryCode,
+	recoveryCode,
 	errorHandler
 )
 

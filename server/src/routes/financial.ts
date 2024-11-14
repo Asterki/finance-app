@@ -7,7 +7,7 @@ import { validateRequestBody } from '../middleware/validationMiddleware'
 import errorHandler from '../middleware/errorHandler'
 
 // Import handlers
-import financialGetByID from '../controllers/financial/getByID'
+import getByID from '../controllers/financial/getByID'
 import createTransaction from '../controllers/financial/createTransaction'
 import deleteTransaction from '../controllers/financial/deleteTransaction'
 import getTransactions from '../controllers/financial/getTransactions'
@@ -21,7 +21,7 @@ const getTransactionByIDSchema = z.object({
 router.post(
 	'/getTransaction',
 	[validateRequestBody(getTransactionByIDSchema), ensureAuthenticated],
-	financialGetByID,
+	getByID,
 	errorHandler
 )
 

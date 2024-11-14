@@ -9,16 +9,16 @@ import { validateRequestBody } from '../middleware/validationMiddleware'
 import errorHandler from '../middleware/errorHandler'
 
 // Import handlers
-import accountsFetch from '../controllers/accounts/fetch'
-import accountsRegister from '../controllers/accounts/register'
-import accountsLogin from '../controllers/accounts/login'
-import accountsLogout from '../controllers/accounts/logout'
-import accountsDeleteAccount from '../controllers/accounts/deleteAccount'
+import fetch from '../controllers/accounts/fetch'
+import register from '../controllers/accounts/register'
+import login from '../controllers/accounts/login'
+import logout from '../controllers/accounts/logout'
+import deleteAccount from '../controllers/accounts/deleteAccount'
 
 const router = express.Router()
 
 // Fetch account
-router.get('/me', accountsFetch)
+router.get('/me', fetch)
 
 // Register account
 const registerSchema = z.object({
@@ -32,7 +32,7 @@ const registerSchema = z.object({
 router.post(
 	'/register',
 	validateRequestBody(registerSchema),
-	accountsRegister,
+	register,
 	errorHandler
 )
 
@@ -45,12 +45,12 @@ const loginSchema = z.object({
 router.post(
 	'/login',
 	validateRequestBody(loginSchema),
-	accountsLogin,
+	login,
 	errorHandler
 )
 
 // Logout account
-router.post('/logout', ensureAuthenticated, accountsLogout, errorHandler)
+router.post('/logout', ensureAuthenticated, logout, errorHandler)
 
 // Delete account
 const deleteAccountSchema = z.object({
@@ -61,7 +61,7 @@ router.delete(
 	'/me',
 	ensureAuthenticated,
 	validateRequestBody(deleteAccountSchema),
-	accountsDeleteAccount,
+	deleteAccount,
 	errorHandler
 )
 
