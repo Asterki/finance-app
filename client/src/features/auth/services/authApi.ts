@@ -32,7 +32,17 @@ const logout = async () => {
 	return response.data.status == 'success'
 }
 
-const login = async (email: string, password: string, tfaCode: string = '') => {
+const login = async (
+	email: string,
+	password: string,
+	tfaCode: string = ''
+): Promise<
+	| 'unauthenticated'
+	| 'success'
+	| 'invalid-credentials'
+	| 'tfa-required'
+	| 'invalid-tfa-code'
+> => {
 	const res = await axios.post<Types.LoginResponseData>(
 		`${apiEndpoint}/login`,
 		{
@@ -44,7 +54,7 @@ const login = async (email: string, password: string, tfaCode: string = '') => {
 			withCredentials: true,
 		}
 	)
-	return res.data
+	return res.data.status
 }
 
 const register = async (

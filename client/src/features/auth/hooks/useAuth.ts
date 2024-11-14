@@ -50,8 +50,9 @@ const useAuth = () => {
 		} catch (error) {
 			if (isAxiosError(error)) {
 				const responseError = error.response?.data as ResponseError
-				return responseError.status
+				return responseError.message
 			} else {
+				// TODO: Handle unknown errors
 				console.log(error)
 				return 'unknown-error'
 			}
@@ -68,21 +69,18 @@ const useAuth = () => {
 			dispatch(setAuthStatus('loading'))
 
 			const result = await authApi.login(email, password, tfaCode)
-			if (result.status === 'success') {
+			if (result === 'success') {
 				// Set the user to the state
 				const userResult = await authApi.fetchUser()
 				dispatch(setUser(userResult.user!))
 				dispatch(setAuthStatus('authenticated'))
-				return {
-					status: 'success',
-				}
-			} else {
-				return result
 			}
+
+			return result
 		} catch (error) {
 			if (isAxiosError(error)) {
 				const responseError = error.response?.data as ResponseError
-				return responseError.status
+				return responseError.message
 			} else {
 				console.log(error)
 				return 'unknown-error'
