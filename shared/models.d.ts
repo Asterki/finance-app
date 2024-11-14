@@ -30,31 +30,6 @@ export type Expense = {
   updatedAt: Date; // Last date the expense was updated
 };
 
-// Income Model
-export type Income = {
-  id: string; // Unique identifier (UUID or auto-incremented ID)
-  userId: string; // Foreign key referencing the user
-  amount: number; // Amount of the income
-  source: string; // Source of the income (e.g., "Salary", "Freelance")
-  date: Date; // Date the income was received
-  description: string; // Optional description or notes about the income
-  createdAt: Date; // Date the income entry was created
-  updatedAt: Date; // Last date the income entry was updated
-};
-
-// Budget Model
-export type Budget = {
-  id: string; // Unique identifier (UUID or auto-incremented ID)
-  userId: string; // Foreign key referencing the user
-  category: string; // Budget category (e.g., "Groceries", "Entertainment")
-  amount: number; // Budgeted amount for the category
-  startDate: Date; // Start date of the budget period
-  endDate: Date; // End date of the budget period
-  createdAt: Date; // Date the budget was created
-  updatedAt: Date; // Last date the budget was updated
-  status: 'active' | 'inactive'; // Status of the budget (active, completed, etc.)
-};
-
 // Transaction History Model (for tracking all transactions, whether expenses or income)
 export type Transaction = {
   id: string; // Unique identifier (UUID or auto-incremented ID)

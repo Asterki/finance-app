@@ -1,5 +1,3 @@
-// FILE: accounts.ts
-
 import express from 'express'
 import { z } from 'zod'
 
