@@ -68,3 +68,8 @@ export type Security = {
   createdAt: Date; // Date the security settings were created
   updatedAt: Date; // Last date the security settings were updated
 };
+
+export type ResponseError = {
+  message: string;
+  status: number;
+}

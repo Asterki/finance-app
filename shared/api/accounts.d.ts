@@ -1,6 +1,6 @@
 import { User } from '../models'
 
-export type FetchResponse =
+export type FetchResponseData =
 	| {
 			status: 'success'
 			user: User

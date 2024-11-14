@@ -1,76 +1,50 @@
 import axios from 'axios'
-import handleResponseError from '../../../utils/handleResponseError'
-
 import * as Types from '../../../../../shared/api/accounts'
 
 const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/accounts`
 
 const fetchUser = async () => {
-	try {
-		const res = await axios.get<Types.FetchResponseData>(`${apiEndpoint}/me`, {
-			withCredentials: true,
-		})
+	const res = await axios.get<Types.FetchResponseData>(`${apiEndpoint}/me`, {
+		withCredentials: true,
+	})
 
+	if (res.data.status == 'unauthenticated') {
 		return {
 			status: res.data.status,
-			user: res.data.status === 'success' ? res.data.user : null,
+			user: null,
 		}
-	} catch (error) {
-		if (axios.isAxiosError(error)) {
-			return {
-				status: handleResponseError(error),
-				user: null,
-			}
-		} else {
-			return {
-				status: 'unknown-error',
-				user: null,
-			}
+	} else {
+		return {
+			status: res.data.status,
+			user: res.data.user,
 		}
 	}
 }
 
 const logout = async () => {
-	try {
-		const response = await axios.post<Types.LogoutResponseData>(
-			`${apiEndpoint}/logout`,
-			{},
-			{
-				withCredentials: true,
-			}
-		)
-		return response.data.status == 'success'
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	} catch (err) {
-		return false
-	}
+	const response = await axios.post<Types.LogoutResponseData>(
+		`${apiEndpoint}/logout`,
+		{},
+		{
+			withCredentials: true,
+		}
+	)
+	return response.data.status == 'success'
 }
 
 const login = async (email: string, password: string, tfaCode: string = '') => {
-	try {
-		const res = await axios.post<Types.LoginResponseData>(
-			`${apiEndpoint}/login`,
-			{
-				email,
-				password,
-				tfaCode,
-			} as Types.LoginRequestBody,
-			{
-				withCredentials: true,
-			}
-		)
-		return res.data
-	} catch (error) {
-		if (axios.isAxiosError(error)) {
-			return {
-				status: handleResponseError(error),
-			}
-		} else {
-			return {
-				status: 'unknown-error',
-			}
+	const res = await axios.post<Types.LoginResponseData>(
+		`${apiEndpoint}/login`,
+		{
+			email,
+			password,
+			tfaCode,
+		} as Types.LoginRequestBody,
+		{
+			withCredentials: true,
 		}
-	}
+	)
+	return res.data
 }
 
 const register = async (
@@ -81,29 +55,21 @@ const register = async (
 	language: string,
 	timezone: string
 ) => {
-	try {
-		const res = await axios.post<Types.RegisterResponseData>(
-			`${apiEndpoint}/register`,
-			{
-				name,
-				email,
-				password,
-				currency,
-				language,
-				timezone,
-			} as Types.RegisterRequestBody,
-			{
-				withCredentials: true,
-			}
-		)
-		return res.data.status
-	} catch (error) {
-		if (axios.isAxiosError(error)) {
-			return handleResponseError(error)
-		} else {
-			return 'unknown-error'
+	const res = await axios.post<Types.RegisterResponseData>(
+		`${apiEndpoint}/register`,
+		{
+			name,
+			email,
+			password,
+			currency,
+			language,
+			timezone,
+		} as Types.RegisterRequestBody,
+		{
+			withCredentials: true,
 		}
-	}
+	)
+	return res.data.status
 }
 
 export default { fetchUser, logout, login, register }

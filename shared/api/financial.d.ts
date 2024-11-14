@@ -4,7 +4,7 @@ export interface GetTransactionByIDRequestBody {
 	transactionId: string
 }
 
-export type GetTransactionByIDResponse =
+export type GetTransactionByIDResponseData =
 	| {
 			status: 'success'
 			transaction: Transaction

@@ -101,7 +101,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 						setPasswordVisible(!passwordVisible)
 					}}
 				>
-					{passwordVisible ? <HiEye /> : <HiEyeOff />}
+					{passwordVisible ? <HiEye className="text-neutral-700 dark:text-white" /> : <HiEyeOff className="text-neutral-700 dark:text-white" />}
 				</button>
 			</div>
 

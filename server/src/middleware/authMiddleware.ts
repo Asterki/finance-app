@@ -7,7 +7,7 @@ const ensureAuthenticated = (
 	next: NextFunction
 ) => {
 	if (req.isUnauthenticated() || !req.user) {
-		res.status(200).send({ status: 'unauthenticated' })
+		res.status(401).send({ status: 'unauthenticated' })
 	} else {
 		next()
 	}
