@@ -1,10 +1,10 @@
-import FinancialService from '../../services/financial'
+import TransactionsService from '../../services/transactions'
 
 import { NextFunction, Request, Response } from 'express'
 import {
 	CreateTransactionRequestBody as RequestBody,
 	CreateTransactionResponseData as ResponseData,
-} from '../../../../shared/api/financial'
+} from '../../../../shared/api/transactions'
 import { User } from '@prisma/client'
 
 const createTransactionHandler = async (
@@ -16,7 +16,7 @@ const createTransactionHandler = async (
 		const user = req.user as User
 		const { amount, category, date, description, tags, type } = req.body
 
-		const transaction = await FinancialService.createTransaction(
+		const transaction = await TransactionsService.createTransaction(
 			user.id,
 			type,
 			amount,

@@ -1,10 +1,10 @@
-import FinancialService from '../../services/financial'
+import TransactionsService from '../../services/transactions'
 
 import { NextFunction, Request, Response } from 'express'
 import {
 	DeleteTransactionRequestBody as RequestBody,
 	DeleteTransactionResponseData as ResponseData,
-} from '../../../../shared/api/financial'
+} from '../../../../shared/api/transactions'
 import { User } from '@prisma/client'
 
 const deleteTransactionHandler = async (
@@ -16,7 +16,7 @@ const deleteTransactionHandler = async (
 		const user = req.user as User
 		const { transactionID } = req.body
 
-		const transaction = await FinancialService.deleteTransaction(
+		const transaction = await TransactionsService.deleteTransaction(
 			user.id,
             transactionID
 		)

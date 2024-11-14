@@ -6,16 +6,16 @@ import prismaSingleton from '../config/prisma'
 const prisma = prismaSingleton.getClient()
 
 // Services must not handle errors, since the controllers that call them are responsible for handling them.
-class FinancialService {
-	private static instance: FinancialService
+class TransactionsService {
+	private static instance: TransactionsService
 
 	private constructor() {}
 
-	public static getInstance(): FinancialService {
-		if (!FinancialService.instance) {
-			FinancialService.instance = new FinancialService()
+	public static getInstance(): TransactionsService {
+		if (!TransactionsService.instance) {
+			TransactionsService.instance = new TransactionsService()
 		}
-		return FinancialService.instance
+		return TransactionsService.instance
 	}
 
 	public async createTransaction(
@@ -152,4 +152,4 @@ class FinancialService {
 	}
 }
 
-export default FinancialService.getInstance()
+export default TransactionsService.getInstance()

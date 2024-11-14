@@ -1,10 +1,10 @@
-import FinancialService from '../../services/financial'
+import TransactionsService from '../../services/transactions'
 
 import { NextFunction, Request, Response } from 'express'
 import {
 	GetTransactionByIDRequestBody as RequestBody,
 	GetTransactionByIDResponseData as ResponseData,
-} from '../../../../shared/api/financial'
+} from '../../../../shared/api/transactions'
 import { User } from '@prisma/client'
 
 import ResponseError from '../../utils/responseError'
@@ -18,7 +18,7 @@ const getTransactionByIDHandler = async (
 		const user = req.user as User
 		const { transactionId } = req.body
 
-		const transaction = await FinancialService.getTransaction(
+		const transaction = await TransactionsService.getTransaction(
 			user.id,
 			transactionId
 		)

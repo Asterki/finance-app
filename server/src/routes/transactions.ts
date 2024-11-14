@@ -7,12 +7,12 @@ import { validateRequestBody } from '../middleware/validationMiddleware'
 import errorHandler from '../middleware/errorHandler'
 
 // Import handlers
-import getByID from '../controllers/financial/getByID'
-import createTransaction from '../controllers/financial/createTransaction'
-import deleteTransaction from '../controllers/financial/deleteTransaction'
-import getTransactions from '../controllers/financial/getTransactions'
-import updateTransaction from '../controllers/financial/updateTransaction'
-import getBalance from '../controllers/financial/getBalance'
+import getByID from '../controllers/transactions/getByID'
+import createTransaction from '../controllers/transactions/createTransaction'
+import deleteTransaction from '../controllers/transactions/deleteTransaction'
+import getTransactions from '../controllers/transactions/getTransactions'
+import updateTransaction from '../controllers/transactions/updateTransaction'
+import getBalance from '../controllers/transactions/getBalance'
 
 const router = express.Router()
 

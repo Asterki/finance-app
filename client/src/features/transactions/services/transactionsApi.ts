@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 import { Transaction } from '../../../../../shared/models'
-import * as Types from '../../../../../shared/api/financial'
+import * as Types from '../../../../../shared/api/transactions'
 
-const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/financial`
+const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/transactions`
 
 const getBalance = async (): Promise<number> => {
 	const response = await axios.get<Types.GetBalanceResponseData>(

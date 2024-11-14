@@ -1,7 +1,7 @@
-import FinancialService from '../../services/financial'
+import TransactionsService from '../../services/transactions'
 
 import { NextFunction, Request, Response } from 'express'
-import { GetBalanceResponseData as ResponseData } from '../../../../shared/api/financial'
+import { GetBalanceResponseData as ResponseData } from '../../../../shared/api/transactions'
 import { User } from '@prisma/client'
 
 const getBalanceHandler = async (
@@ -11,7 +11,7 @@ const getBalanceHandler = async (
 ) => {
 	try {
 		const user = req.user as User
-		const balance = await FinancialService.getBalance(user.id)
+		const balance = await TransactionsService.getBalance(user.id)
 
 		res.status(200).send({
 			status: 'success',

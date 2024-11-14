@@ -1,10 +1,10 @@
-import FinancialService from '../../services/financial'
+import TransactionsService from '../../services/transactions'
 
 import { NextFunction, Request, Response } from 'express'
 import {
 	UpdateTransactionRequestBody as RequestBody,
 	UpdateTransactionResponseData as ResponseData,
-} from '../../../../shared/api/financial'
+} from '../../../../shared/api/transactions'
 import { User } from '@prisma/client'
 
 const updateTransactionHandler = async (
@@ -17,7 +17,7 @@ const updateTransactionHandler = async (
 		const { amount, category, date, description, tags, transactionID } =
 			req.body
 
-		const transaction = await FinancialService.updateTransaction(
+		const transaction = await TransactionsService.updateTransaction(
 			user.id,
 			transactionID,
 			amount,
