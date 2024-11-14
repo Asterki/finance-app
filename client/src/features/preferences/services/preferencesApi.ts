@@ -1,6 +1,4 @@
 import axios from 'axios'
-import handleResponseError from '../../../utils/handleResponseError'
-
 import * as Types from '../../../../../shared/api/preferences'
 
 const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/preferences`
@@ -82,85 +80,41 @@ const changePassword = async (
 }
 
 const generateRecoveryCode = async (email: string) => {
-	try {
-		const response =
-			await axios.post<Types.GenerateRecoveryCodeResponseData>(
-				`${apiEndpoint}/generateRecoveryCode`,
-				{ email } as Types.GenerateRecoveryCodeRequestBody,
-				{
-					withCredentials: true,
-				}
-			)
+	const response = await axios.post<Types.GenerateRecoveryCodeResponseData>(
+		`${apiEndpoint}/generateRecoveryCode`,
+		{ email } as Types.GenerateRecoveryCodeRequestBody,
+		{
+			withCredentials: true,
+		}
+	)
 
-		return {
-			status: response.data.status,
-		}
-	} catch (error) {
-		if (axios.isAxiosError(error)) {
-			return {
-				status: handleResponseError(error),
-			}
-		} else {
-			return {
-				status: 'unknown-error',
-			}
-		}
-	}
+	return response.data.status
 }
 
 const resetPassword = async (resetToken: string, newPassword: string) => {
-	try {
-		const response = await axios.post<Types.ChangePasswordResponseData>(
-			`${apiEndpoint}/resetPassword`,
-			{
-				resetToken,
-				newPassword,
-			} as Types.ResetPasswordRequestBody,
-			{
-				withCredentials: true,
-			}
-		)
+	const response = await axios.post<Types.ChangePasswordResponseData>(
+		`${apiEndpoint}/resetPassword`,
+		{
+			resetToken,
+			newPassword,
+		} as Types.ResetPasswordRequestBody,
+		{
+			withCredentials: true,
+		}
+	)
 
-		return {
-			status: response.data.status,
-		}
-	} catch (error) {
-		if (axios.isAxiosError(error)) {
-			return {
-				status: handleResponseError(error),
-			}
-		} else {
-			return {
-				status: 'unknown-error',
-			}
-		}
-	}
+	return response.data.status
 }
 
 const generateTFASecret = async () => {
-	try {
-		const response = await axios.get<Types.GenerateTFASecretResponseData>(
-			`${apiEndpoint}/generateTFASecret`,
-			{
-				withCredentials: true,
-			}
-		)
+	const response = await axios.get<Types.GenerateTFASecretResponseData>(
+		`${apiEndpoint}/generateTFASecret`,
+		{
+			withCredentials: true,
+		}
+	)
 
-		return {
-			secret: response.data.secret,
-			status: 'success',
-		}
-	} catch (error) {
-		if (axios.isAxiosError(error)) {
-			return {
-				status: handleResponseError(error),
-			}
-		} else {
-			return {
-				status: 'unknown-error',
-			}
-		}
-	}
+	return response.data.secret
 }
 
 export default {
