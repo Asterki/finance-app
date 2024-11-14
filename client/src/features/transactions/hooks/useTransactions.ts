@@ -35,13 +35,42 @@ const useFinancial = () => {
 		}
 	}
 
+	const createTransaction = async (transaction: {
+		amount: number
+		type: 'income' | 'expense'
+		description: string
+		category: string
+		date: string
+		tags: string[]
+	}) => {
+		try {
+			await transactionsApi.createTransaction(
+				transaction.date,
+				transaction.type,
+				transaction.amount,
+				transaction.category,
+				transaction.description,
+				transaction.tags
+			)
+			await fetchTransactions()
+		} catch (error) {
+			if (isAxiosError(error)) {
+				const responseError = error.response?.data as ResponseError
+				return responseError.message
+			} else {
+				console.log(error)
+				return 'unknown-error'
+			}
+		}
+	}
+
 	React.useEffect(() => {
 		;(async () => {
 			await fetchTransactions()
 		})()
 	})
 
-	return { currentTransactions, fetchTransactions }
+	return { currentTransactions, fetchTransactions, createTransaction }
 }
 
 export default useFinancial
