@@ -108,8 +108,8 @@ class FinancialService {
 	}
 
 	public async updateTransaction(
-		transactionID: string,
 		userID: string,
+		transactionID: string,
 		amount: number,
 		category: string,
 		description: string,

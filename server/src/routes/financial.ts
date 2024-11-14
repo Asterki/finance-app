@@ -11,6 +11,7 @@ import getByID from '../controllers/financial/getByID'
 import createTransaction from '../controllers/financial/createTransaction'
 import deleteTransaction from '../controllers/financial/deleteTransaction'
 import getTransactions from '../controllers/financial/getTransactions'
+import updateTransaction from '../controllers/financial/updateTransaction'
 
 const router = express.Router()
 
@@ -63,6 +64,22 @@ router.post(
 	'/getTransactions',
 	[validateRequestBody(getTransactionsSchema), ensureAuthenticated],
 	getTransactions,
+	errorHandler
+)
+
+// Update transaction
+const updateTransactionSchema = z.object({
+	transactionID: z.string().min(1).max(100),
+	amount: z.number().positive(),
+	category: z.string().min(1).max(100),
+	description: z.string().min(1).max(100),
+	date: z.date(),
+	tags: z.array(z.string().max(20).min(10)).max(10),
+})
+router.post(
+	'/updateTransaction',
+	[validateRequestBody(updateTransactionSchema), ensureAuthenticated],
+	updateTransaction,
 	errorHandler
 )
 
