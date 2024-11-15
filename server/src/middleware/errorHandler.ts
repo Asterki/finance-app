@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
-import CustomError from '../utils/customError'
+import ResponseError from '../utils/responseError'
+
+import logger from '../utils/logger'
 
 const errorHandler = (
 	err: any,
@@ -7,12 +9,18 @@ const errorHandler = (
 	res: Response,
 	next: NextFunction
 ) => {
-	if (err instanceof CustomError) {
+	if (err instanceof ResponseError) {
+		if (err.statusCode === 500) {
+			logger.error(err.message as string, true)
+		}
+
 		res.status(err.statusCode).send({
-			status: 'error',
-			message: err.errorCode,
+			status: err.errorCode,
+			message: err.message,
 		})
 	} else {
+		logger.error(err.stack as string, true)
+
 		res.status(500).send({
 			status: 'error',
 			message: 'server-error',

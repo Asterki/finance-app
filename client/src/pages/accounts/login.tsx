@@ -56,10 +56,10 @@ const AccountsLoginPage = () => {
 			const { email, password, tfaCode } = validatedData.data
 			const result = await login(email, password, tfaCode)
 
-			if (result.status == 'success') {
+			if (result == 'success') {
 				redirect('/')
 			} else {
-				showNotification('Error', result.status, 'error')
+				showNotification('Error', result, 'error')
 				setLoginLoading(false)
 			}
 		}

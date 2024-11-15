@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { isAxiosError } from 'axios'
+import { ResponseError } from '../../../../../shared/models'
 
 import preferencesApi from '../services/preferencesApi'
 import { setPreferences } from '../slices/preferences'
@@ -21,31 +23,86 @@ const usePreferences = () => {
 	}
 
 	const generateTFASecret = async () => {
-		return await preferencesApi.generateTFASecret()
+		try {
+			return await preferencesApi.generateTFASecret()
+		} catch (error) {
+			if (isAxiosError(error)) {
+				const responseError = error.response?.data as ResponseError
+				return responseError.message
+			} else {
+				// TODO: Handle unknown errors
+				console.log(error)
+				return 'unknown-error'
+			}
+		}
 	}
 
 	const enableTFA = async (code: string, secret: string) => {
-		return await preferencesApi.enableTFA(code, secret)
+		try {
+			return await preferencesApi.enableTFA(code, secret)
+		} catch (error) {
+			if (isAxiosError(error)) {
+				const responseError = error.response?.data as ResponseError
+				return responseError.message
+			} else {
+				// TODO: Handle unknown errors
+				console.log(error)
+				return 'unknown-error'
+			}
+		}
 	}
 
 	const disableTFA = async (password: string) => {
-		return await preferencesApi.disableTFA(password)
+		try {
+			return await preferencesApi.disableTFA(password)
+		} catch (error) {
+			if (isAxiosError(error)) {
+				const responseError = error.response?.data as ResponseError
+				return responseError.message
+			} else {
+				// TODO: Handle unknown errors
+				console.log(error)
+				return 'unknown-error'
+			}
+		}
 	}
 
 	const fetchPreferences = async () => {
-		const response = await preferencesApi.fetchPreferences()
-		if (response.status === 'success') {
-			dispatch(
-				setPreferences({
-					security: response.preferences!.security,
-					user: response.preferences!.preferences,
-				})
-			)
+		try {
+			const result = await preferencesApi.fetchPreferences()
+			if (result) {
+				dispatch(
+					setPreferences({
+						security: result.security,
+						user: result.preferences,
+					})
+				)
+			} // We do not account for null-value preferences, as they usually come with an error status code
+		} catch (error) {
+			if (isAxiosError(error)) {
+				const responseError = error.response?.data as ResponseError
+				return responseError.message
+			} else {
+				// TODO: Handle unknown errors
+				console.log(error)
+				return 'unknown-error'
+			}
 		}
 	}
 
 	const changePassword = async (oldPassword: string, newPassword: string) => {
-		return await preferencesApi.changePassword(oldPassword, newPassword)
+		try {
+			return await preferencesApi.changePassword(oldPassword, newPassword)
+		} catch (error) {
+			if (isAxiosError(error)) {
+				const responseError = error.response?.data as ResponseError
+				return responseError.message
+			} else {
+				// TODO: Handle unknown errors
+				console.log(error)
+				return 'unknown-error'
+			}
+		}
 	}
 
 	React.useEffect(() => {

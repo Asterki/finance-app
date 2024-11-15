@@ -6,7 +6,7 @@ export interface EnableTFARequestBody {
 }
 
 export interface EnableTFAResponseData {
-	status: 'success' | 'invalid-code' | 'internal-error' | 'invalid-tfa-secret'
+	status: 'success' | 'invalid-code' | 'invalid-tfa-secret'
 }
 
 export interface DisableTFARequestBody {
@@ -14,7 +14,7 @@ export interface DisableTFARequestBody {
 }
 
 export interface DisableTFAResponseData {
-	status: 'success' | 'internal-error' | 'invalid-password'
+	status: 'success' | 'invalid-password'
 }
 
 export interface UpdateProfileRequestBody {
@@ -25,16 +25,21 @@ export interface UpdateProfileRequestBody {
 }
 
 export interface UpdateProfileResponseData {
-	status: 'success' | 'internal-error' | 'invalid-parameters'
+	status: 'success' | 'invalid-parameters'
 }
 
-export interface FetchPreferencesResponseData {
-	status: 'success' | 'internal-error' | 'unauthenticated'
-	preferences?: {
-		preferences: UserPreferences
-		security: Security
+export type FetchPreferencesResponseData = | 
+	{
+		status: 'success'
+		preferences: {
+			preferences: UserPreferences
+			security: Security
+		}
 	}
-}
+	| {
+		status: 'unauthenticated'
+		preferences: null
+	}
 
 export interface ChangePasswordRequestBody {
 	oldPassword: string
@@ -42,7 +47,7 @@ export interface ChangePasswordRequestBody {
 }
 
 export interface ChangePasswordResponseData {
-	status: 'success' | 'internal-error' | 'invalid-password'
+	status: 'success' | 'invalid-password'
 }
 
 export interface GenerateRecoveryCodeRequestBody {
@@ -50,7 +55,7 @@ export interface GenerateRecoveryCodeRequestBody {
 }
 
 export interface GenerateRecoveryCodeResponseData {
-	status: 'success' | 'internal-error' | 'user-not-found'
+	status: 'success' | 'user-not-found'
 }
 
 export interface ResetPasswordRequestBody {
@@ -59,10 +64,10 @@ export interface ResetPasswordRequestBody {
 }
 
 export interface ResetPasswordResponseData {
-	status: 'success' | 'internal-error' | 'invalid-reset-token'
+	status: 'success' | 'invalid-reset-token'
 }
 
 export interface GenerateTFASecretResponseData {
-	status: 'success' | 'internal-error'
+	status: 'success'
 	secret?: string
 }

@@ -153,7 +153,7 @@ const RegisterForm: React.FC<LoginFormProps> = ({
 							setPasswordVisible(!passwordVisible)
 						}}
 					>
-						{passwordVisible ? <HiEye /> : <HiEyeOff />}
+						{passwordVisible ? <HiEye  className="text-neutral-700 dark:text-white" /> : <HiEyeOff  className="text-neutral-700 dark:text-white" />}
 					</button>
 				</div>
 			</div>
@@ -183,7 +183,7 @@ const RegisterForm: React.FC<LoginFormProps> = ({
 							setRepeatPasswordVisible(!repeatPasswordVisible)
 						}}
 					>
-						{repeatPasswordVisible ? <HiEye /> : <HiEyeOff />}
+						{repeatPasswordVisible ? <HiEye  className="text-neutral-700 dark:text-white" /> : <HiEyeOff  className="text-neutral-700 dark:text-white" />}
 					</button>
 				</div>
 			</div>

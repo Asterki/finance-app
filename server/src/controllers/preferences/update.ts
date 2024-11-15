@@ -24,7 +24,9 @@ const profileUpdateHandler = async (
 			timezone,
 		})
 
-		res.status(200).send(result)
+		res.status(200).send({
+			status: result,
+		})
 	} catch (error) {
 		next(error)
 	}

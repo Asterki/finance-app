@@ -58,16 +58,21 @@ const PreferencesPage = () => {
 
 	const generateTFASecretButtonClick = async () => {
 		if (!user) return
+		const secret = await generateTFASecret()
 
-		const secret = (await generateTFASecret()).secret!
-		setSecret(secret)
-		setQrCode(
-			await QRCode.toDataURL(
-				`otpauth://totp/MyApp:${
-					user!.email
-				}?secret=${secret}&issuer=MyApp`
+		if (!secret) {
+			showNotification('Error', 'Failed to Generate TFA Secret', 'error')
+			return
+		} else {
+			setSecret(secret)
+			setQrCode(
+				await QRCode.toDataURL(
+					`otpauth://totp/MyApp:${
+						user!.email
+					}?secret=${secret}&issuer=MyApp`
+				)
 			)
-		)
+		}
 	}
 
 	const enableTFAButtonClick = async () => {
@@ -75,14 +80,14 @@ const PreferencesPage = () => {
 
 		const response = await enableTFA(tfaInputRef.current.value, secret)
 
-		if (response.status === 'success') {
+		if (response === 'success') {
 			showNotification('Success', 'TFA Enabled', 'success')
 			setSecret('')
 			setQrCode('')
 			// We don't worry about updating the preferences state since the backend already does this for us
 			// But we will re-fetch the preferences to get the updated state
 			fetchPreferences()
-		} else if (response.status === 'invalid-code') {
+		} else if (response === 'invalid-code') {
 			showNotification('Error', 'Invalid TFA Code, Try Again', 'error')
 		} else {
 			showNotification('Error', 'Failed to Enable TFA', 'error')
@@ -96,15 +101,14 @@ const PreferencesPage = () => {
 		if (!password) return
 
 		const response = await disableTFA(password)
-
-		if (response.status == 'success') {
+		if (response == 'success') {
 			showNotification(
 				'Success',
 				'TFA has been disabled for your account',
 				'success'
 			)
 			fetchPreferences()
-		} else if (response.status == 'invalid-password') {
+		} else if (response == 'invalid-password') {
 			showNotification('Error', 'Invalid Password', 'error')
 		}
 	}
@@ -121,7 +125,7 @@ const PreferencesPage = () => {
 		}
 
 		const response = await changePassword(oldPassword, newPassword)
-		if (response.status == 'success') {
+		if (response == 'success') {
 			showNotification(
 				'Success',
 				'Password Changed Successfully',
@@ -129,7 +133,7 @@ const PreferencesPage = () => {
 			)
 			oldPasswordRef.current!.value = ''
 			newPasswordRef.current!.value = ''
-		} else if (response.status == 'invalid-password') {
+		} else if (response == 'invalid-password') {
 			showNotification('Error', 'Invalid Password', 'error')
 			newPasswordRef.current!.value = ''
 		} else {

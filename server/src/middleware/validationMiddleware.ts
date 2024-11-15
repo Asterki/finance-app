@@ -6,7 +6,7 @@ const validateRequestBody =
 	(req: Request, res: Response, next: NextFunction) => {
 		const parsedBody = schema.safeParse(req.body)
 		if (!parsedBody.success) {
-			res.status(200).send({
+			res.status(400).send({
 				status: 'invalid-parameters',
 				errors: parsedBody.error.errors,
 			})

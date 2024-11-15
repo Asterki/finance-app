@@ -27,46 +27,47 @@ class AccountService {
 		currency: string,
 		language: string,
 		timezone: string
-	) {
-		try {
-			const isTaken = await prisma.user.findFirst({
-				where: {
-					email,
-				},
-			})
-			if (isTaken) return { status: 'user-exists' }
+	): Promise<
+		| {
+				status: 'user-exists'
+		  }
+		| {
+				status: 'success'
+				user: User
+		  }
+	> {
+		const isTaken = await prisma.user.findFirst({
+			where: {
+				email,
+			},
+		})
+		if (isTaken) return { status: 'user-exists' }
 
-			// Create the user
-			const user = await prisma.user.create({
-				data: {
-					email,
-					passwordHash: bcrypt.hashSync(password, 10),
-					name: name,
-					preferences: {
-						create: {
-							currency,
-							language,
-							timezone,
-						},
-					},
-					// So that we don't have to create this object again
-					security: {
-						create: {
-							twoFactorEnabled: false,
-						},
+		// Create the user
+		const user = await prisma.user.create({
+			data: {
+				email,
+				passwordHash: bcrypt.hashSync(password, 10),
+				name: name,
+				preferences: {
+					create: {
+						currency,
+						language,
+						timezone,
 					},
 				},
-			})
+				// So that we don't have to create this object again
+				security: {
+					create: {
+						twoFactorEnabled: false,
+					},
+				},
+			},
+		})
 
-			return {
-				status: 'success',
-				user: user as unknown as User,
-			}
-		} catch (error) {
-			Logger.error((error as Error).message, true)
-			return {
-				status: 'internal-error',
-			}
+		return {
+			status: 'success',
+			user: user as unknown as User,
 		}
 	}
 
@@ -74,59 +75,47 @@ class AccountService {
 		userID: string,
 		password: string,
 		tfaCode?: string
-	): Promise<{
-		status:
-			| 'invalid-password'
-			| 'internal-error'
-			| 'invalid-tfa'
-			| 'success'
-	}> {
-		try {
-			const user = await prisma.user.findFirst({
-				where: {
-					id: userID,
-				},
-				include: {
-					preferences: true,
-					security: true,
-				},
-			})
-			if (!user) return { status: 'internal-error' }
-			// Check passwords and TFA CODE
+	): Promise<'invalid-password' | 'invalid-tfa' | 'success'> {
+		const user = await prisma.user.findFirst({
+			where: {
+				id: userID,
+			},
+			include: {
+				preferences: true,
+				security: true,
+			},
+		})
+		if (!user)
+			throw new Error(
+				'User is trying to delete their account, from a deleted account, what the hell?'
+			)
 
-			if (!bcrypt.compareSync(password, user.passwordHash))
-				return { status: 'invalid-password' }
+		// Check passwords and TFA CODE
+		if (!bcrypt.compareSync(password, user.passwordHash))
+			return 'invalid-password'
 
-			if (user.security?.twoFactorEnabled) {
-				if (
-					tfaCode &&
-					!speakeasy.totp.verify({
-						secret: user.security.twoFactorSecret as string,
-						encoding: 'base32',
-						token: tfaCode,
-					})
-				)
-					return { status: 'invalid-tfa' }
-			}
-			// Delete the user and their related documents
-			await prisma.user.delete({
-				where: {
-					id: userID,
-				},
-				include: {
-					security: true,
-					preferences: true,
-				},
-			})
-			return {
-				status: 'success',
-			}
-		} catch (error) {
-			Logger.error((error as Error).message, true)
-			return {
-				status: 'internal-error',
-			}
+		if (user.security?.twoFactorEnabled) {
+			if (
+				tfaCode &&
+				!speakeasy.totp.verify({
+					secret: user.security.twoFactorSecret as string,
+					encoding: 'base32',
+					token: tfaCode,
+				})
+			)
+				return 'invalid-tfa'
 		}
+		// Delete the user and their related documents
+		await prisma.user.delete({
+			where: {
+				id: userID,
+			},
+			include: {
+				security: true,
+				preferences: true,
+			},
+		})
+		return 'success'
 	}
 
 	public async authenticatePassword(userID: string, password: string) {

@@ -6,6 +6,8 @@ import {
 	ChangePasswordRequestBody as RequestBody,
 } from '../../../../shared/api/preferences'
 
+import ResponseError from '../../utils/responseError'
+
 import { User } from '@prisma/client'
 
 const changePasswordHandler = async (
@@ -20,10 +22,17 @@ const changePasswordHandler = async (
 		const result = await PreferencesService.changePassword(
 			user.id,
 			oldPassword,
-            newPassword
+			newPassword
 		)
-		
-        res.json(result)
+
+		if (result == 'invalid-password')
+			throw new ResponseError(
+				409,
+				'invalid-password',
+				'The password you provided is incorrect'
+			)
+
+		res.status(200).send({ status: result })
 	} catch (error) {
 		next(error)
 	}

@@ -1,9 +1,14 @@
 import { User } from '../models'
 
-export interface FetchResponseData {
-	status: 'success' | 'unauthenticated'
-	user?: User
-}
+export type FetchResponseData =
+	| {
+			status: 'success'
+			user: User
+	  }
+	| {
+			status: 'unauthenticated'
+			user: null
+	  }
 
 export interface LogoutResponseData {
 	status: 'success' | 'unauthenticated'
@@ -37,12 +42,11 @@ export interface RegisterResponseData {
 	status: 'success' | 'user-exists' | 'internal-error'
 }
 
-
 export interface DeleteAccountRequestBody {
 	password: string
 	tfaCode?: string
 }
 
 export interface DeleteAccountResponseData {
-	status: "invalid-password" | "internal-error" | "invalid-tfa" | "success";
+	status: 'invalid-password' | 'internal-error' | 'invalid-tfa' | 'success'
 }

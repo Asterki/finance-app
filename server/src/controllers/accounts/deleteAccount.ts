@@ -7,15 +7,17 @@ import {
 } from '../../../../shared/api/accounts'
 import { User } from '@prisma/client'
 
-const handler = async (
+import ResponseError from '../../utils/responseError'
+
+const deleteAccountHandler = async (
 	req: Request<{}, {}, RequestBody>,
 	res: Response<ResponseData>,
 	next: NextFunction
 ) => {
-	const user = req.user as User
-	const { password, tfaCode } = req.body
-
 	try {
+		const user = req.user as User
+		const { password, tfaCode } = req.body
+
 		const isValidPassword = await AccountService.authenticatePassword(
 			user.id,
 			password
@@ -27,13 +29,35 @@ const handler = async (
 				tfaCode
 			)
 
-            res.send(result)
+			switch (result) {
+				case 'invalid-password':
+					throw new ResponseError(
+						409,
+						'invalid-password',
+						'The provided password is incorrect.'
+					)
+				case 'invalid-tfa':
+					throw new ResponseError(
+						409,
+						'invalid-tfa',
+						'The provided TFA code is incorrect.'
+					)
+				default:
+					res.send({
+						status: result,
+					})
+					break
+			}
 		} else {
-			res.status(401).json({ status: 'invalid-password' })
+			throw new ResponseError(
+				401,
+				'invalid-password',
+				'The provided password is incorrect.'
+			)
 		}
 	} catch (error) {
-		next()
+		next(error)
 	}
 }
 
-export default handler
+export default deleteAccountHandler
