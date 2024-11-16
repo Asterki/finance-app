@@ -7,6 +7,7 @@ import { useTransactions } from '../../features/transactions'
 import { usePreferences } from '../../features/preferences'
 
 import AddExpenseComponent from '../../features/transactions/components/AddExpenseComponent'
+import AddIncomeComponent from '../../features/transactions/components/AddIncomeComponent'
 
 import PageLayout from '../../layouts/PageLayout'
 
@@ -17,6 +18,7 @@ const LandingPage = () => {
 	const { preferences } = usePreferences()
 
 	const [expenseDialogOpen, setExpenseDialogOpen] = React.useState(false)
+	const [incomeDialogOpen, setIncomeDialogOpen] = React.useState(false)
 
 	const [currentBalance, setCurrentBalance] = React.useState<
 		number | 'loading'
@@ -69,7 +71,10 @@ const LandingPage = () => {
 							>
 								Add Expense
 							</button>
-							<button className="bg-blue-500 rounded-sm text-white w-full p-2 transition-all hover:brightness-110 shadow-md">
+							<button
+								onClick={() => setIncomeDialogOpen(true)}
+								className="bg-blue-500 rounded-sm text-white w-full p-2 transition-all hover:brightness-110 shadow-md"
+							>
 								Add Income
 							</button>
 						</div>
@@ -121,6 +126,13 @@ const LandingPage = () => {
 					open={expenseDialogOpen}
 					onClose={() => {
 						setExpenseDialogOpen(false)
+					}}
+				/>
+
+				<AddIncomeComponent
+					open={incomeDialogOpen}
+					onClose={() => {
+						setIncomeDialogOpen(false)
 					}}
 				/>
 			</section>
