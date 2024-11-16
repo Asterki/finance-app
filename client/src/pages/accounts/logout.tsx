@@ -1,9 +1,7 @@
 import useNotification from '../../hooks/useNotification'
-import { useAuth } from '../../features/auth'
+import { useAuth, LogoutComponent } from '../../features/auth'
 
 import PageLayout from '../../layouts/PageLayout'
-
-import LogoutComponent from '../../features/auth/components/LogoutComponent'
 
 const AccountsLogoutPage = () => {
 	const { user } = useAuth()

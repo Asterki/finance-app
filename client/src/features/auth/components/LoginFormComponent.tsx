@@ -24,7 +24,7 @@ interface LoginFormProps {
 	authStatus: string
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({
+const LoginFormComponent: React.FC<LoginFormProps> = ({
 	onSubmit,
 	loginLoading,
 	user,
@@ -135,4 +135,4 @@ const LoginForm: React.FC<LoginFormProps> = ({
 	)
 }
 
-export default LoginForm
+export default LoginFormComponent

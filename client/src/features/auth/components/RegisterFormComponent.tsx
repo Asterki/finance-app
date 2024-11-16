@@ -28,7 +28,7 @@ interface LoginFormProps {
 	authStatus: string
 }
 
-const RegisterForm: React.FC<LoginFormProps> = ({
+const RegisterFormComponent: React.FC<LoginFormProps> = ({
 	onSubmit,
 	registerLoading,
 	user,
@@ -217,4 +217,4 @@ const RegisterForm: React.FC<LoginFormProps> = ({
 	)
 }
 
-export default RegisterForm
+export default RegisterFormComponent

@@ -2,12 +2,10 @@ import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
-import { useAuth } from '../../features/auth'
+import { useAuth, LoginFormComponent } from '../../features/auth'
 import useNotification from '../../hooks/useNotification'
 
 import PageLayout from '../../layouts/PageLayout'
-
-import LoginForm from '../../features/auth/components/LoginFormComponent'
 
 const AccountsLoginPage = () => {
 	const { notification, showNotification } = useNotification()
@@ -72,7 +70,7 @@ const AccountsLoginPage = () => {
 		>
 			<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex items-center justify-center">
 				<div className="w-4/12">
-					<LoginForm
+					<LoginFormComponent
 						user={user}
 						authStatus={authStatus}
 						onSubmit={onSubmitButtonClick}

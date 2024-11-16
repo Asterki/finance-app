@@ -2,12 +2,10 @@ import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
-import { useAuth } from '../../features/auth'
+import { useAuth, RegisterFormComponent } from '../../features/auth'
 import useNotification from '../../hooks/useNotification'
 
 import PageLayout from '../../layouts/PageLayout'
-
-import RegisterForm from '../../features/auth/components/RegisterFormComponent'
 
 const AccountsRegisterPage = () => {
 	const { notification, showNotification } = useNotification()
@@ -112,7 +110,7 @@ const AccountsRegisterPage = () => {
 			className="min-h-screen bg-[url('/img/bg.jpg')]"
 		>
 			<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex items-center justify-center">
-				<RegisterForm
+				<RegisterFormComponent
 					user={user}
 					authStatus={authStatus}
 					onSubmit={onSubmitButtonClick}

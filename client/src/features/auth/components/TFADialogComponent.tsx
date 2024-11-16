@@ -8,7 +8,7 @@ interface TFADialogProps {
   onSubmit: (tfaCode: string) => void;
 }
 
-const TFADialog: React.FC<TFADialogProps> = ({ open, onClose, onSubmit }) => {
+const TFADialogComponent: React.FC<TFADialogProps> = ({ open, onClose, onSubmit }) => {
   const tfaCodeRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = () => {
@@ -38,4 +38,4 @@ const TFADialog: React.FC<TFADialogProps> = ({ open, onClose, onSubmit }) => {
   );
 };
 
-export default TFADialog;
+export default TFADialogComponent;

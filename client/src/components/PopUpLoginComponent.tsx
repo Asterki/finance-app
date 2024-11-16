@@ -7,8 +7,8 @@ import NotificationComponent from './NotificationComponent';
 import { useAuth } from '../features/auth';
 import useNotification from '../hooks/useNotification';
 
-import TFADialog from '../features/auth/components/TFADialogComponent';
-import LoginForm from '../features/auth/components/LoginFormComponent';
+import TFADialogComponent from '../features/auth/components/TFADialogComponent';
+import LoginFormComponent from '../features/auth/components/LoginFormComponent';
 
 // To be later changed to a translate service
 const messages = {
@@ -96,7 +96,7 @@ const PopUpLogin = () => {
         type={notification.type}
       />
 
-      <TFADialog
+      <TFADialogComponent
         open={tfaDialogOpen}
         onClose={() => setTFADialogOpen(false)}
         onSubmit={(tfaCode) => {
@@ -108,7 +108,7 @@ const PopUpLogin = () => {
         <p className='mb-4 text-center'>
           The page you're trying to access requires you to be logged in. Please login to continue.
         </p>
-        <LoginForm loginLoading={loginLoading} onSubmit={loginButtonPressed} authStatus={authStatus} user={user} />
+        <LoginFormComponent loginLoading={loginLoading} onSubmit={loginButtonPressed} authStatus={authStatus} user={user} />
 
         <div className='text-center mt-4 flex gap-2 items-center justify-center'>
           <Link to='/register' className='text-blue-500 hover:underline'>
