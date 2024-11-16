@@ -118,7 +118,7 @@ const AddExpenseComponent: React.FC<AddExpenseComponentProps> = (props) => {
 
 		console.log(description, amount, date, tags)
 
-		if (!description || !amount || !date || !tags) {
+		if (!description || !amount || !date) {
 			return
 		}
 
@@ -128,7 +128,7 @@ const AddExpenseComponent: React.FC<AddExpenseComponentProps> = (props) => {
 			description,
 			category: selectedCategory,
 			date,
-			tags: tags.split(',').map((tag) => tag.trim()),
+			tags: tags ? tags.split(',').map((tag) => tag.trim()) : [],
 		})
 
 		console.log(res)

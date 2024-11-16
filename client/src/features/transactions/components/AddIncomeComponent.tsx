@@ -120,7 +120,7 @@ const AddIncomeComponent: React.FC<AddIncomeComponentProps> = (props) => {
 			description,
 			category: selectedCategory,
 			date,
-			tags: tags.split(',').map((tag) => tag.trim()),
+			tags: tags ? tags.split(',').map((tag) => tag.trim()) : [],
 		})
 
 		props.onClose()
