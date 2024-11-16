@@ -6,14 +6,17 @@ import { useAuth } from '../../features/auth'
 import { useTransactions } from '../../features/transactions'
 import { usePreferences } from '../../features/preferences'
 
+import AddExpenseComponent from '../../features/transactions/components/AddExpenseComponent'
+
 import PageLayout from '../../layouts/PageLayout'
 
 const LandingPage = () => {
 	const { notification } = useNotification()
 	const { user, authStatus } = useAuth()
-	const { currentTransactions, createTransaction, getBalance } =
-		useTransactions()
+	const { currentTransactions, getBalance } = useTransactions()
 	const { preferences } = usePreferences()
+
+	const [expenseDialogOpen, setExpenseDialogOpen] = React.useState(false)
 
 	const [currentBalance, setCurrentBalance] = React.useState<
 		number | 'loading'
@@ -28,17 +31,6 @@ const LandingPage = () => {
 		})()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-
-	const random = async () => {
-		createTransaction({
-			amount: Math.random() * 100,
-			type: Math.random() > 0.5 ? 'income' : 'expense',
-			description: 'Random Transaction',
-			category: 'Random',
-			date: new Date().toISOString(),
-			tags: ['random'],
-		})
-	}
 
 	return (
 		<PageLayout
@@ -71,7 +63,10 @@ const LandingPage = () => {
 						</div>
 
 						<div className="flex items-stretch justify-stretch h-full gap-2 w-full">
-							<button className="bg-blue-500 rounded-sm text-white w-full p-2 transition-all hover:brightness-110 shadow-md">
+							<button
+								onClick={() => setExpenseDialogOpen(true)}
+								className="bg-blue-500 rounded-sm text-white w-full p-2 transition-all hover:brightness-110 shadow-md"
+							>
 								Add Expense
 							</button>
 							<button className="bg-blue-500 rounded-sm text-white w-full p-2 transition-all hover:brightness-110 shadow-md">
@@ -88,7 +83,13 @@ const LandingPage = () => {
 							{currentTransactions &&
 								currentTransactions.map((transaction) => (
 									<li key={transaction.id}>
-										<span className={`font-semibold ${transaction.type == "expense" ? "text-red-500" : "text-green-500"}`}>
+										<span
+											className={`font-semibold ${
+												transaction.type == 'expense'
+													? 'text-red-500'
+													: 'text-green-500'
+											}`}
+										>
 											{preferences &&
 												preferences.user.currency}{' '}
 											{transaction.type == 'expense'
@@ -98,8 +99,8 @@ const LandingPage = () => {
 												transaction.amount * 100
 											) / 100}{' '}
 										</span>
-										
-										{" - "}
+
+										{' - '}
 
 										{transaction.description}
 									</li>
@@ -107,6 +108,21 @@ const LandingPage = () => {
 						</ul>
 					</div>
 				</div>
+
+				<div className="md:w-1/2 w-full flex items-center justify-center">
+					<img
+						src="https://placehold.co/400"
+						alt="Placeholder"
+						className="rounded-md shadow-md"
+					/>
+				</div>
+
+				<AddExpenseComponent
+					open={expenseDialogOpen}
+					onClose={() => {
+						setExpenseDialogOpen(false)
+					}}
+				/>
 			</section>
 		</PageLayout>
 	)
