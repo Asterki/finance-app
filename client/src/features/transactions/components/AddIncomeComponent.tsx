@@ -27,6 +27,66 @@ const incomeCategories = [
 		label: 'Gift',
 	},
 	{
+		value: 'freelance',
+		label: 'Freelance',
+	},
+	{
+		value: 'rental_income',
+		label: 'Rental Income',
+	},
+	{
+		value: 'dividends',
+		label: 'Dividends',
+	},
+	{
+		value: 'royalties',
+		label: 'Royalties',
+	},
+	{
+		value: 'investment_profits',
+		label: 'Investment Profits',
+	},
+	{
+		value: 'alimony',
+		label: 'Alimony',
+	},
+	{
+		value: 'child_support',
+		label: 'Child Support',
+	},
+	{
+		value: 'inheritance',
+		label: 'Inheritance',
+	},
+	{
+		value: 'refunds',
+		label: 'Refunds',
+	},
+	{
+		value: 'stipend',
+		label: 'Stipend',
+	},
+	{
+		value: 'scholarship',
+		label: 'Scholarship',
+	},
+	{
+		value: 'business_income',
+		label: 'Business Income',
+	},
+	{
+		value: 'grants',
+		label: 'Grants',
+	},
+	{
+		value: 'lottery_winnings',
+		label: 'Lottery Winnings',
+	},
+	{
+		value: 'cashback',
+		label: 'Cashback',
+	},
+	{
 		value: 'other',
 		label: 'Other',
 	},

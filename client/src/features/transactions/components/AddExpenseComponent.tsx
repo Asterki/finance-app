@@ -43,6 +43,58 @@ const expenseCategories = [
 		label: 'Education',
 	},
 	{
+		value: 'insurance',
+		label: 'Insurance',
+	},
+	{
+		value: 'subscriptions',
+		label: 'Subscriptions',
+	},
+	{
+		value: 'travel',
+		label: 'Travel',
+	},
+	{
+		value: 'charity',
+		label: 'Charity',
+	},
+	{
+		value: 'pets',
+		label: 'Pets',
+	},
+	{
+		value: 'personal_care',
+		label: 'Personal Care',
+	},
+	{
+		value: 'home_maintenance',
+		label: 'Home Maintenance',
+	},
+	{
+		value: 'childcare',
+		label: 'Childcare',
+	},
+	{
+		value: 'loan_repayment',
+		label: 'Loan Repayment',
+	},
+	{
+		value: 'gifts',
+		label: 'Gifts',
+	},
+	{
+		value: 'taxes',
+		label: 'Taxes',
+	},
+	{
+		value: 'savings',
+		label: 'Savings',
+	},
+	{
+		value: 'investments',
+		label: 'Investments',
+	},
+	{
 		value: 'other',
 		label: 'Other',
 	},
