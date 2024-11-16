@@ -38,7 +38,7 @@ export type Transaction = {
   type: 'expense' | 'income'; // Type of transaction
   category: string; // Category (for expense or income)
   description: string | null; // Optional description
-  date: string; // Date of the transaction
+  date: Date; // Date of the transaction
   tags: string[]; // Tags for categorization
   createdAt: Date; // Date the transaction was created
   updatedAt: Date; // Last date the transaction was updated

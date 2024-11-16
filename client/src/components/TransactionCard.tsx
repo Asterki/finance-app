@@ -113,8 +113,14 @@ export const TransactionCardComponent = (props: Props) => {
 						{props.type == 'expense' ? '-' : ''}
 						{Math.round(props.amount * 100) / 100} {props.currency}
 					</span>
-					<span className="text-neutral-500">
+					<span className="text-neutral-500 flex gap-2">
 						{props.description}
+
+						{props.tags.map((tag) => (
+							<span className="rounded-3xl border border-neutral-600 px-2 transition-all hover:brightness-110 bg-neutral-700">
+								#{tag}
+							</span>
+						))}
 					</span>
 				</div>
 			</div>
