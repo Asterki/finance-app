@@ -194,7 +194,7 @@ const AddExpenseComponent: React.FC<AddExpenseComponentProps> = (props) => {
 						</Select.Content>
 					</Select.Root>
 					<input
-						type="date"
+						type="datetime-local"
 						placeholder="Date"
 						ref={dateRef}
 						className="p-2 dark:bg-neutral-700 bg-neutral-200 rounded-sm w-full"

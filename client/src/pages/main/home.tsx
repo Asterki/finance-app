@@ -10,6 +10,7 @@ import AddExpenseComponent from '../../features/transactions/components/AddExpen
 import AddIncomeComponent from '../../features/transactions/components/AddIncomeComponent'
 
 import PageLayout from '../../layouts/PageLayout'
+import { TransactionCardComponent } from '../../components/TransactionCard'
 
 const LandingPage = () => {
 	const { notification } = useNotification()
@@ -84,33 +85,20 @@ const LandingPage = () => {
 						<h2 className="font-bold text-2xl">
 							Recent Transactions
 						</h2>
-						<ul>
-							{currentTransactions &&
+						<div className="flex gap-2 flex-col">
+							{currentTransactions && preferences &&
 								currentTransactions.map((transaction) => (
-									<li key={transaction.id}>
-										<span
-											className={`font-semibold ${
-												transaction.type == 'expense'
-													? 'text-red-500'
-													: 'text-green-500'
-											}`}
-										>
-											{preferences &&
-												preferences.user.currency}{' '}
-											{transaction.type == 'expense'
-												? '-'
-												: '+'}
-											{Math.round(
-												transaction.amount * 100
-											) / 100}{' '}
-										</span>
-
-										{' - '}
-
-										{transaction.description}
-									</li>
+									<TransactionCardComponent
+										type={transaction.type}
+										amount={transaction.amount}
+										category={transaction.category}
+										date={transaction.date as string}
+										description={transaction.description!}
+										tags={transaction.tags}
+										currency={preferences.user.currency}
+									/>
 								))}
-						</ul>
+						</div>
 					</div>
 				</div>
 
