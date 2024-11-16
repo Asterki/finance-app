@@ -61,7 +61,7 @@ const PopUpLogin = () => {
     setLoginLoading(true);
     const result = await login(emailOrUsername, password, tfaCode);
 
-    switch (result.status) {
+    switch (result) {
       case 'success':
         showNotification('Successfully logged in', 'You have successfully logged in', 'success');
         break;
