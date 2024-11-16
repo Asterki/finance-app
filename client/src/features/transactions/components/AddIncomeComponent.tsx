@@ -124,6 +124,13 @@ const AddIncomeComponent: React.FC<AddIncomeComponentProps> = (props) => {
 		})
 
 		props.onClose()
+
+		// Clear the form fields
+		descriptionRef.current!.value = ''
+		amountRef.current!.value = ''
+		dateRef.current!.value = ''
+		tagsRef.current!.value = ''
+		setSelectedCategory("food")
 	}
 
 	return (

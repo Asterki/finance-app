@@ -33,7 +33,7 @@ const LandingPage = () => {
 			}
 		})()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, [currentTransactions])
 
 	return (
 		<PageLayout

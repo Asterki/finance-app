@@ -134,6 +134,13 @@ const AddExpenseComponent: React.FC<AddExpenseComponentProps> = (props) => {
 		console.log(res)
 
 		props.onClose()
+
+		// Clear the form fields
+		descriptionRef.current!.value = ''
+		amountRef.current!.value = ''
+		dateRef.current!.value = ''
+		tagsRef.current!.value = ''
+		setSelectedCategory("food")
 	}
 
 	return (
