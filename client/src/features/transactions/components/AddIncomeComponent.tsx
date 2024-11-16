@@ -95,7 +95,7 @@ const incomeCategories = [
 const AddIncomeComponent: React.FC<AddIncomeComponentProps> = (props) => {
 	const { createTransaction } = useTransactions()
 
-	const [selectedCategory, setSelectedCategory] = React.useState('food')
+	const [selectedCategory, setSelectedCategory] = React.useState('salary')
 
 	const descriptionRef = React.useRef<HTMLInputElement>(null)
 	const amountRef = React.useRef<HTMLInputElement>(null)
@@ -107,6 +107,8 @@ const AddIncomeComponent: React.FC<AddIncomeComponentProps> = (props) => {
 		const amount = amountRef.current?.value
 		const date = dateRef.current?.value
 		const tags = tagsRef.current?.value
+
+		console.log(description, amount, date, tags)
 
 		if (!description || !amount || !date || !tags) {
 			return
