@@ -1,6 +1,6 @@
 # Financial App
 
-Manage your expenses and incomes effortlessly through a web interface. The Financial App provides a user-friendly platform to track finances with account management, security features, and access from anywhere.
+Manage your expenses and incomes effortlessly through a web interface. The Financial App provides a user-friendly platform to track finances with account management, security features, and access from anywhere, planning to add budgets and automatic transactions in the future.
 
 ---
 
