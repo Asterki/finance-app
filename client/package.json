@@ -17,6 +17,7 @@
     "@vitejs/plugin-react": "^4.3.3",
     "axios": "^1.7.7",
     "chart.js": "^4.4.6",
+    "date-fns": "^4.1.0",
     "framer-motion": "^11.11.17",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",

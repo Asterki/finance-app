@@ -6,5 +6,7 @@ import useTransactions from './hooks/useTransactions'
 import AddExpenseComponent from './components/AddExpenseComponent'
 import AddIncomeComponent from './components/AddIncomeComponent'
 import CurrentBalanceComponent from './components/CurrentBalanceComponent'
+import TransactionCardComponent from './components/TransactionCardComponent'
+import SeeTransactionComponent from './components/SeeTransactionComponent'
 
-export { transactionsApi, transactionsReducer, useTransactions, AddExpenseComponent, AddIncomeComponent, CurrentBalanceComponent }
+export { transactionsApi, transactionsReducer, useTransactions, AddExpenseComponent, AddIncomeComponent, CurrentBalanceComponent, TransactionCardComponent, SeeTransactionComponent }

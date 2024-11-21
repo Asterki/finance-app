@@ -8,11 +8,13 @@ import {
 	AddExpenseComponent,
 	AddIncomeComponent,
 	CurrentBalanceComponent,
+	TransactionCardComponent,
+	SeeTransactionComponent,
 } from '../../features/transactions'
 import { usePreferences } from '../../features/preferences'
 
 import PageLayout from '../../layouts/PageLayout'
-import { TransactionCardComponent } from '../../components/TransactionCard'
+import { Transaction } from '../../../../shared/models'
 
 const LandingPage = () => {
 	const { notification } = useNotification()
@@ -22,6 +24,14 @@ const LandingPage = () => {
 
 	const [expenseDialogOpen, setExpenseDialogOpen] = React.useState(false)
 	const [incomeDialogOpen, setIncomeDialogOpen] = React.useState(false)
+
+	const [seeTransactionState, setSeeTransactionState] = React.useState<{
+		open: boolean
+		transaction: Transaction | null
+	}>({
+		open: false,
+		transaction: null,
+	})
 
 	return (
 		<PageLayout
@@ -82,6 +92,12 @@ const LandingPage = () => {
 											}
 											tags={transaction.tags}
 											currency={preferences.user.currency}
+											onClick={() => {
+												setSeeTransactionState({
+													open: true,
+													transaction,
+												})
+											}}
 										/>
 									))}
 
@@ -110,6 +126,19 @@ const LandingPage = () => {
 						setIncomeDialogOpen(false)
 					}}
 				/>
+
+				{seeTransactionState.transaction && (
+					<SeeTransactionComponent
+						open={seeTransactionState.open}
+						transaction={seeTransactionState.transaction!}
+						onClose={() => {
+							setSeeTransactionState({
+								open: false,
+								transaction: null,
+							})
+						}}
+					/>
+				)}
 			</section>
 		</PageLayout>
 	)

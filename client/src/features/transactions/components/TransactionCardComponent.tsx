@@ -43,6 +43,7 @@ type Props = {
 	category: string
 	tags: string[]
 	currency: string
+	onClick?: () => void
 }
 
 const expenseIcons: { [key: string]: JSX.Element } = {
@@ -93,9 +94,12 @@ const incomeIcons: { [key: string]: JSX.Element } = {
 	other: <FaRegGrinSquint />,
 }
 
-export const TransactionCardComponent = (props: Props) => {
+const TransactionCardComponent = (props: Props) => {
 	return (
-		<div className="rounded-sm bg-neutral-700 p-2 flex items-center transition-all hover:brightness-110 cursor-pointer">
+		<div
+			className="rounded-sm bg-neutral-700 p-2 flex items-center transition-all hover:brightness-110 cursor-pointer"
+			onClick={props.onClick}
+		>
 			<div className="rounded-full bg-neutral-800/20 p-4">
 				{props.type === 'expense'
 					? expenseIcons[props.category]
@@ -127,3 +131,5 @@ export const TransactionCardComponent = (props: Props) => {
 		</div>
 	)
 }
+
+export default TransactionCardComponent
