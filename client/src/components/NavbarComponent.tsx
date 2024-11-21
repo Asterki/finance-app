@@ -41,14 +41,6 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
               >
                 <DropdownMenu.Trigger className='outline-none flex items-center justify-between px-4 py-2 rounded-sm border-2 dark:border-white/20 transition-all dark:hover:bg-white/10 cursor-pointer w-full'>
                   <div className='flex items-center justify-center'>
-                    <div>
-                      <img
-                        width={30}
-                        src='https://www.asterki.tech/assets/images/icon.png'
-                        alt='wjaoi'
-                        className='mr-2 rounded-full'
-                      />
-                    </div>
                     <div className='dark:text-white'>{props.user.name}</div>
                   </div>
                   <div  className={`dark:text-white/40 text-black/30 ${menuOpen ? 'rotate-180' : ''} transition-all `}>
